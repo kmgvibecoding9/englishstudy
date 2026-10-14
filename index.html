@@ -2,530 +2,790 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Мой сад дома</title>
-<meta name="description" content="Справочник по уходу за домашними растениями: полив, свет, температура, проблемы и сезоны.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3DA5FF">
+<title>EnglishLand — английский для детей</title>
 <style>
 :root{
-  --bg:#f5f3ea;--surface:#fffefa;--ink:#1f2a22;--muted:#5d6b61;--line:#dcd9c9;
-  --green:#2f7d4f;--green-d:#1f5c38;--green-l:#dcefe0;
-  --sun:#d99a0b;--sun-l:#faedc4;--water:#2b79b8;--water-l:#d8e9f6;--warn:#c4476a;--warn-l:#f8dde5;
-  --shadow:0 1px 2px rgba(31,42,34,.08),0 6px 18px rgba(31,42,34,.06);
-  --r:16px;
+  --blue:#3DA5FF; --blue-d:#1f7fd6;
+  --yellow:#FFC933; --yellow-d:#d9a000;
+  --coral:#FF6B6B; --coral-d:#d94848;
+  --mint:#3DDC97; --mint-d:#1fae72;
+  --purple:#9B6BFF; --purple-d:#7347d6;
+  --cream:#FFF8EC; --ink:#1F2A44;
+  --fs:20px; --tap:64px;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#141a16;--surface:#1d2520;--ink:#e8efe9;--muted:#9bab9f;--line:#33403a;
-    --green:#5cbf84;--green-d:#8fdcac;--green-l:#22392b;
-    --sun:#f0b840;--sun-l:#3b3217;--water:#6cb4ea;--water-l:#1c3042;--warn:#ee82a1;--warn-l:#3f212b;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
-  }
+body.age-cubs{--fs:26px;--tap:96px}
+body.age-explorers{--fs:21px;--tap:72px}
+body.age-heroes{--fs:19px;--tap:64px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Fredoka","Baloo 2","Nunito","Quicksand","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  font-size:var(--fs);color:var(--ink);background:var(--cream);overflow:hidden;user-select:none;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Golos Text",system-ui,sans-serif;overflow-x:hidden}
-h1,h2,h3{font-family:Unbounded,"Golos Text",sans-serif;line-height:1.2;margin:0}
-h2{font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.4rem}
-h3{font-size:1.05rem}
-p{margin:.3rem 0}
-button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:6px}
-.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+#sky{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#8fd0ff 0%,#c9ecff 55%,#FFF8EC 100%);overflow:hidden}
+.cloud{position:absolute;font-size:90px;opacity:.9;filter:drop-shadow(0 10px 8px rgba(61,165,255,.25));animation:drift linear infinite;will-change:transform}
+@keyframes drift{from{transform:translateX(-20vw)}to{transform:translateX(120vw)}}
+.sparkle{position:absolute;font-size:22px;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+.screen{flex:1;display:flex;flex-direction:column;align-items:center;overflow:auto;padding:12px 16px 28px;animation:pop .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(12px)}to{opacity:1;transform:none}}
+.center{justify-content:center}
 
-/* header */
-header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0}
-.logo{font:700 1.05rem Unbounded,sans-serif;color:var(--green-d);text-decoration:none;display:flex;gap:8px;align-items:center;margin-right:auto}
-nav{display:flex;gap:4px;flex-wrap:wrap}
-nav a{padding:7px 14px;border-radius:99px;text-decoration:none;color:var(--ink);font-weight:500;font-size:.95rem}
-nav a:hover{background:var(--green-l)}
-nav a.on{background:var(--green);color:#fff}
-nav .cnt{background:var(--sun);color:#1f2a22;border-radius:99px;font-size:.75rem;padding:0 7px;margin-left:4px;font-weight:600}
+/* top bar */
+#bar{display:flex;align-items:center;gap:10px;padding:10px 14px;z-index:2}
+#bar.hidden{display:none}
+.chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.85);border-radius:999px;padding:6px 16px;font-weight:700;box-shadow:0 5px 0 rgba(31,42,68,.12)}
+.spacer{flex:1}
 
-/* hero */
-.hero{padding:44px 0 20px;display:grid;gap:28px;grid-template-columns:1.1fr 1fr;align-items:center}
-.hero h1{font-size:clamp(2rem,6vw,3.4rem);color:var(--green-d)}
-.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:30em;margin:14px 0 22px}
-.btns{display:flex;gap:10px;flex-wrap:wrap}
-.btn{border:0;border-radius:99px;padding:11px 22px;font-weight:600;text-decoration:none;display:inline-block}
-.btn.pri{background:var(--green);color:#fff}
-.btn.pri:hover{background:var(--green-d)}
-.btn.sec{background:var(--surface);border:1.5px solid var(--green);color:var(--green-d)}
-.btn.sec:hover{background:var(--green-l)}
-.shelf{position:relative;padding-top:10px}
-.shelf .row{display:flex;align-items:flex-end;justify-content:space-around;gap:4px;border-bottom:10px solid #a9794b;padding:0 8px;border-radius:2px}
-.shelf button{background:none;border:0;padding:0;flex:1;max-width:120px;transform-origin:bottom;animation:grow .9s cubic-bezier(.2,.9,.3,1.2) both;transition:transform .2s}
-.shelf button:hover{transform:translateY(-6px) scale(1.04)}
-.shelf button:nth-child(2){animation-delay:.1s}.shelf button:nth-child(3){animation-delay:.2s}
-.shelf button:nth-child(4){animation-delay:.3s}.shelf button:nth-child(5){animation-delay:.4s}
-@keyframes grow{from{transform:scaleY(0);opacity:0}to{transform:none;opacity:1}}
-.shelf svg{width:100%;height:auto;display:block}
-.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:8px}
-
-/* sections */
-section.page{padding:28px 0 56px}
-.sub{color:var(--muted);margin-bottom:18px}
-.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
-input[type=search],input[type=date]{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px}
-input[type=search]{flex:1;min-width:220px}
-.chip{background:var(--surface);border:1.5px solid var(--line);border-radius:99px;padding:6px 14px;font-size:.9rem}
-.chip[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.count{color:var(--muted);font-size:.9rem;margin:6px 0 14px}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:0;padding:0;text-align:left;display:flex;flex-direction:column;transition:transform .2s}
-button.card:hover{transform:translateY(-3px)}
-.card .pic{position:relative;aspect-ratio:5/3}
-.card .pic svg{width:100%;height:100%;display:block}
-.badge{position:absolute;top:10px;left:10px;background:var(--green);color:#fff;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:99px}
-.card .body{padding:12px 16px 16px}
-.card .lat{color:var(--muted);font-style:italic;font-size:.88rem}
-.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.tag{font-size:.8rem;padding:2px 10px;border-radius:99px;font-weight:500}
-.tag.w{background:var(--water-l);color:var(--water)}.tag.s{background:var(--sun-l);color:var(--sun)}.tag.t{background:var(--warn-l);color:var(--warn)}
-.empty{text-align:center;padding:40px 16px;background:var(--surface);border-radius:var(--r)}
-
-/* dialog */
-dialog{border:0;padding:0;border-radius:20px;width:min(760px,calc(100vw - 20px));max-height:92vh;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
-dialog::backdrop{background:rgba(10,20,14,.55)}
-.dhead{position:relative}
-.dhead svg{width:100%;height:210px;display:block}
-.dhead .x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface);font-size:1.3rem;box-shadow:var(--shadow)}
-.dbody{padding:18px 22px 24px}
-.dbody .ttl{margin-bottom:2px}
-.dgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:16px}
-.blk{background:var(--bg);border-radius:14px;padding:12px 14px}
-.blk h4{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.scale{display:flex;gap:4px;margin:6px 0}
-.scale i{flex:1;height:8px;border-radius:4px;background:var(--line)}
-.scale i.on{background:var(--water)}
-.scale.light i.on{background:var(--sun)}
-.scale.hum i.on{background:var(--green)}
-.temp{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#6aa5d8,#7cc58e,#f0c050,#e5784f);margin:12px 0 4px}
-.temp b{position:absolute;top:-4px;height:18px;border:2.5px solid var(--ink);border-radius:9px;background:rgba(255,255,255,.35)}
-.tl{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
-.pest{display:inline-block;margin:2px 4px 2px 0;border:1.5px solid var(--warn);background:var(--warn-l);color:var(--warn);border-radius:99px;padding:3px 12px;font-size:.88rem;font-weight:500}
-.pest:hover{background:var(--warn);color:#fff}
-ul.plain{margin:4px 0;padding-left:18px}
-.safe{color:var(--green-d);font-weight:600}.danger{color:var(--warn);font-weight:600}
-.tip{background:var(--sun-l);border-left:4px solid var(--sun);border-radius:10px;padding:10px 14px;margin-top:12px}
-
-/* my plants */
-.summary{background:var(--green-l);border-radius:var(--r);padding:14px 18px;margin:12px 0;font-weight:500}
-.my{display:grid;grid-template-columns:96px 1fr;gap:14px;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:12px;margin-bottom:12px;align-items:center}
-.my .th{border-radius:12px;overflow:hidden}.my .th svg{display:block;width:100%;height:auto}
-.my .st{font-weight:600}
-.st.late{color:var(--warn)}.st.today{color:var(--water)}.st.ok{color:var(--green-d)}
-.bar2{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0}
-.bar2 i{display:block;height:100%;background:var(--water);border-radius:4px}
-.bar2 i.late{background:var(--warn)}
-.row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.9rem}
-.row2 label{color:var(--muted)}
-.btn.sm{padding:6px 14px;font-size:.88rem}
-.link{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.88rem}
-
-/* problems */
-.sym{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin:12px 0 18px}
-.sym button{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left;font-weight:500}
-.sym button[aria-pressed=true]{background:var(--warn);color:#fff;border-color:var(--warn)}
-.causes{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:6px 18px 12px;margin-bottom:24px}
-.cause{padding:12px 0;border-bottom:1px dashed var(--line)}.cause:last-child{border:0}
-.cause b.n{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--warn);color:#fff;text-align:center;font-size:.8rem;line-height:24px;margin-right:8px}
-.cause p{margin-left:32px}
-.cause em{font-style:normal;font-weight:600;color:var(--green-d)}
-.sec-t{margin:28px 0 12px}
-.pgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-.pc{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 18px;scroll-margin-top:90px}
-.pc.hl{outline:3px solid var(--sun);animation:pulse 1.6s}
-@keyframes pulse{50%{background:var(--sun-l)}}
-.pc h3{margin-bottom:4px}
-.pc dt{font-weight:600;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:8px}
-.pc dd{margin:0}
-.note{background:var(--warn-l);border-radius:12px;padding:10px 14px;font-size:.92rem;margin:14px 0}
-.rules{counter-reset:r;list-style:none;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-.rules li{counter-increment:r;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px}
-.rules li::before{content:counter(r);display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;margin-right:8px}
-
-/* seasons */
-.seasons{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.season{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;border-top:6px solid var(--c)}
-.season.now{outline:3px solid var(--c)}
-.season h3{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.season .now-t{font:600 .72rem "Golos Text";background:var(--c);color:#fff;border-radius:99px;padding:2px 10px}
-.season dl{margin:8px 0 0}.season dt{font-weight:600;margin-top:8px;font-size:.88rem;color:var(--muted)}.season dd{margin:0}
-
-footer{border-top:1px solid var(--line);padding:22px 0 36px;color:var(--muted);font-size:.88rem}
-
-@media (max-width:760px){
-  .hero{grid-template-columns:1fr;padding-top:24px}
-  .my{grid-template-columns:72px 1fr}
-  .dhead svg{height:160px}
+/* inflatable buttons */
+.btn{
+  position:relative;min-width:var(--tap);min-height:var(--tap);padding:10px 26px;border-radius:999px;font-weight:700;color:#fff;
+  background:linear-gradient(180deg,var(--c1,#5bb8ff),var(--c2,var(--blue)));
+  box-shadow:0 8px 0 var(--cd,var(--blue-d)),0 14px 22px rgba(31,42,68,.2),inset 0 3px 0 rgba(255,255,255,.55);
+  transition:transform .12s cubic-bezier(.3,2,.5,1),box-shadow .12s;text-shadow:0 2px 0 rgba(0,0,0,.15);
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
 }
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.btn::after{content:"";position:absolute;left:14%;right:14%;top:7%;height:30%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,0));pointer-events:none}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn:active{transform:translateY(6px) scale(.97);box-shadow:0 2px 0 var(--cd,var(--blue-d)),0 4px 8px rgba(31,42,68,.2),inset 0 3px 0 rgba(255,255,255,.4)}
+.btn.yellow{--c1:#ffe077;--c2:var(--yellow);--cd:var(--yellow-d);color:var(--ink);text-shadow:none}
+.btn.coral{--c1:#ff9a9a;--c2:var(--coral);--cd:var(--coral-d)}
+.btn.mint{--c1:#7bf0be;--c2:var(--mint);--cd:var(--mint-d)}
+.btn.purple{--c1:#bb9aff;--c2:var(--purple);--cd:var(--purple-d)}
+.btn.round{padding:0;width:var(--tap);font-size:1.3em}
+.btn.small{min-height:48px;min-width:48px;padding:6px 18px;font-size:.85em}
+.btn:focus-visible,.card:focus-visible,.opt:focus-visible{outline:5px solid var(--ink);outline-offset:4px}
+
+.card{
+  background:#fff;border-radius:32px;padding:18px;box-shadow:0 10px 0 rgba(31,42,68,.1),0 18px 30px rgba(31,42,68,.14);
+  transition:transform .15s cubic-bezier(.3,2,.5,1);text-align:center;font-weight:700;
 }
+button.card:hover{transform:translateY(-6px) rotate(-1deg)}
+button.card:active{transform:translateY(3px) scale(.97)}
+h1,h2,h3{margin:.2em 0;font-weight:700}
+h1{font-size:clamp(34px,6vw,64px);line-height:1.05}
+h2{font-size:clamp(26px,4vw,40px)}
+.sub{opacity:.75;font-weight:600}
+
+/* mascot */
+.mascot{display:inline-block;animation:breathe 3s ease-in-out infinite;filter:drop-shadow(0 18px 12px rgba(31,42,68,.25));transform-origin:50% 100%}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+.bounce{animation:bounce 1.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.big-emoji{font-size:clamp(90px,22vw,200px);line-height:1;cursor:pointer;display:inline-block;filter:drop-shadow(0 16px 10px rgba(31,42,68,.22));transition:transform .2s cubic-bezier(.3,2,.5,1)}
+.big-emoji:active{transform:scale(1.25) rotate(-6deg)}
+
+/* age cards */
+.row{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;align-items:stretch}
+.age-card{width:min(280px,86vw);padding:24px 18px}
+.age-card .em{font-size:96px;line-height:1.1}
+.age-card .nm{font-size:1.3em}
+.age-card .rg{opacity:.7;font-size:.8em}
+
+/* world */
+.world{width:100%;max-width:1000px;display:flex;flex-wrap:wrap;gap:26px 34px;justify-content:center;padding:10px 0 30px}
+.island{width:min(260px,42vw);display:flex;flex-direction:column;align-items:center;background:none;padding:0;animation:float 5s ease-in-out infinite}
+.island:nth-child(2n){animation-delay:-1.6s;margin-top:34px}
+.island:nth-child(3n){animation-delay:-3.1s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.land{
+  position:relative;width:100%;aspect-ratio:1.25;border-radius:50% 50% 46% 46%/58% 58% 42% 42%;
+  background:radial-gradient(circle at 35% 25%,#9af58a,#3DDC97 60%,#1fae72);
+  box-shadow:0 16px 0 #8a5a2b,0 34px 26px rgba(31,42,68,.25),inset 0 -10px 0 rgba(0,0,0,.08),inset 0 8px 0 rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;transition:transform .2s cubic-bezier(.3,2,.5,1);
+}
+.island:hover .land{transform:scale(1.06)}
+.land .ic{font-size:clamp(56px,10vw,96px);filter:drop-shadow(0 10px 6px rgba(0,0,0,.25))}
+.land .deco{position:absolute;font-size:30px}
+.island.sleep{filter:saturate(.25) brightness(.95);cursor:default;animation:none}
+.island.sleep:hover .land{transform:none}
+.island.sleep .land{background:radial-gradient(circle at 35% 25%,#d8e0e8,#aab6c4)}
+.island .lbl{margin-top:26px;background:#fff;border-radius:999px;padding:6px 20px;font-weight:700;box-shadow:0 5px 0 rgba(31,42,68,.12)}
+.island .stars{margin-top:6px;letter-spacing:2px}
+.island.rec .land{animation:glow 1.6s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 16px 0 #8a5a2b,0 34px 26px rgba(31,42,68,.25),0 0 0 0 rgba(255,201,51,.9)}50%{box-shadow:0 16px 0 #8a5a2b,0 34px 26px rgba(31,42,68,.25),0 0 0 22px rgba(255,201,51,0)}}
+.zzz{position:absolute;top:-8px;right:12%;font-size:32px;animation:bounce 2s infinite}
+
+/* activity */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,44vw),1fr));gap:20px;width:100%;max-width:900px;margin-top:14px}
+.act{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:calc(var(--tap)*1.6);justify-content:center}
+.act .ai{font-size:64px;line-height:1}
+.act .st{letter-spacing:3px;font-size:.9em}
+
+/* lesson */
+.word-show{font-size:clamp(48px,11vw,96px);font-weight:700;line-height:1.1;cursor:pointer}
+.word-show b{color:var(--coral)}
+.ru{font-size:.8em;opacity:.7;margin-top:4px;min-height:1.2em}
+.dots{display:flex;gap:8px;margin:8px 0}
+.dot{width:14px;height:14px;border-radius:50%;background:rgba(31,42,68,.18)}
+.dot.on{background:var(--yellow);box-shadow:0 0 0 3px #fff}
+.dot.done{background:var(--mint)}
+.quiz-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:min(560px,92vw);margin-top:16px}
+.opt{background:#fff;border-radius:28px;min-height:calc(var(--tap)*1.5);padding:10px;box-shadow:0 8px 0 rgba(31,42,68,.12);font-size:clamp(46px,10vw,84px);transition:transform .15s cubic-bezier(.3,2,.5,1);display:flex;align-items:center;justify-content:center;flex-direction:column}
+.opt small{font-size:.28em;font-weight:700}
+.opt:hover{transform:translateY(-4px)}
+.opt.ok{background:#c9ffe5;animation:jump .5s}
+.opt.try{animation:wobble .5s;background:#fff1d6}
+@keyframes jump{40%{transform:translateY(-22px) scale(1.1)}}
+@keyframes wobble{20%{transform:rotate(-8deg)}40%{transform:rotate(7deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(2deg)}}
+.bubble{background:#fff;border-radius:26px;padding:10px 20px;box-shadow:0 6px 0 rgba(31,42,68,.1);font-weight:700;position:relative;max-width:90vw;text-align:center}
+
+/* memory */
+.mem{display:grid;gap:14px;width:min(640px,94vw);margin-top:14px}
+.mcard{aspect-ratio:1;perspective:700px;background:none;padding:0;min-height:var(--tap)}
+.mcard .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mcard.flip .in,.mcard.done .in{transform:rotateY(180deg)}
+.mcard .f,.mcard .b{position:absolute;inset:0;border-radius:24px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 7px 0 rgba(31,42,68,.14);flex-direction:column;overflow:hidden}
+.mcard .b{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:2.2em}
+.mcard .f{background:#fff;transform:rotateY(180deg);font-size:clamp(32px,8vw,64px);font-weight:700}
+.mcard .f.w{font-size:clamp(18px,4.6vw,34px);padding:4px;word-break:break-word}
+.mcard.done .f{background:#c9ffe5}
+
+/* balloons */
+.sea{position:relative;flex:1;width:100%;max-width:900px;min-height:340px;overflow:hidden;border-radius:36px;background:rgba(255,255,255,.35)}
+.balloon{position:absolute;bottom:-160px;width:clamp(96px,16vw,150px);height:clamp(120px,20vw,180px);border-radius:50% 50% 48% 48%/55% 55% 45% 45%;display:flex;align-items:center;justify-content:center;font-size:clamp(40px,8vw,70px);font-weight:700;color:#fff;
+  animation:rise linear infinite;box-shadow:inset -14px -14px 0 rgba(0,0,0,.1),inset 10px 10px 0 rgba(255,255,255,.35);padding:0;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.balloon::after{content:"";position:absolute;bottom:-26px;left:50%;width:2px;height:28px;background:rgba(31,42,68,.5)}
+.balloon span{font-size:.55em}
+.balloon.wordb{font-size:clamp(16px,3.2vw,26px)}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(-640px)}}
+.balloon.pop{animation:popb .35s forwards!important}
+@keyframes popb{to{transform:scale(1.6);opacity:0}}
+.balloon.try{animation-play-state:paused;filter:brightness(1.1)}
+
+/* build */
+.slots,.tiles{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.slot,.tile{width:calc(var(--tap)*.95);height:calc(var(--tap)*1.1);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:1.9em;font-weight:700;text-transform:uppercase}
+.slot{background:rgba(255,255,255,.6);border:4px dashed rgba(31,42,68,.3)}
+.slot.fill{background:#c9ffe5;border:4px solid var(--mint);animation:jump .4s}
+.tile{background:linear-gradient(180deg,#ffe077,var(--yellow));box-shadow:0 7px 0 var(--yellow-d);transition:transform .12s}
+.tile:active{transform:translateY(5px);box-shadow:0 2px 0 var(--yellow-d)}
+.tile.used{visibility:hidden}
+.tile.try{animation:wobble .4s}
+
+/* rewards */
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:16px;width:100%;max-width:800px;margin-top:12px}
+.sticker{aspect-ratio:1;border-radius:28px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:62px;box-shadow:0 7px 0 rgba(31,42,68,.12);position:relative;border:5px solid #fff}
+.sticker.lock{filter:grayscale(1) brightness(1.4);opacity:.55;font-size:44px}
+.sticker small{position:absolute;bottom:4px;font-size:15px;font-weight:700}
+.pet-box{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pbar{width:min(320px,80vw);height:22px;background:rgba(255,255,255,.7);border-radius:99px;overflow:hidden;box-shadow:inset 0 3px 0 rgba(0,0,0,.1)}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--yellow),var(--coral));border-radius:99px;transition:width .6s}
+
+/* result */
+.stars-big{font-size:clamp(50px,12vw,100px);letter-spacing:6px}
+.stars-big span{display:inline-block;animation:starIn .6s both cubic-bezier(.3,2,.5,1)}
+@keyframes starIn{from{transform:scale(0) rotate(-180deg)}}
+
+/* parents */
+.panel{background:#fff;border-radius:30px;padding:22px 26px;width:100%;max-width:760px;box-shadow:0 8px 0 rgba(31,42,68,.1);margin-top:14px;font-size:17px;line-height:1.5;font-weight:500}
+.panel h3{font-size:1.25em}
+.panel label{display:flex;align-items:center;gap:12px;margin:12px 0;font-weight:600;flex-wrap:wrap}
+.panel input[type=range]{flex:1;min-width:140px;height:32px;accent-color:var(--blue)}
+.panel select,.panel input[type=number]{font:inherit;padding:8px 12px;border-radius:14px;border:3px solid rgba(31,42,68,.2)}
+.panel .lock-in{font-size:30px;width:150px;text-align:center}
+.panel ul{margin:6px 0;padding-left:22px}
+.switch{width:56px;height:32px;accent-color:var(--mint);transform:scale(1.3)}
+.tag{display:inline-block;background:#fff1c4;border-radius:12px;padding:2px 10px;font-size:.85em;margin:2px}
+
+.toast{position:fixed;left:50%;top:84px;transform:translateX(-50%);z-index:50;background:#fff;border-radius:999px;padding:10px 26px;font-weight:700;box-shadow:0 8px 0 rgba(31,42,68,.14),0 14px 24px rgba(31,42,68,.2);animation:toast 1.5s forwards;pointer-events:none}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-20px) scale(.8)}12%,80%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-10px)}}
+.conf{position:fixed;top:-20px;z-index:60;pointer-events:none;font-size:26px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--rot))}}
+#rest{position:fixed;inset:0;z-index:100;background:rgba(61,165,255,.96);display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;color:#fff;text-align:center;padding:20px}
+#rest.show{display:flex}
+.karaoke .line{font-size:clamp(26px,5vw,44px);font-weight:700;margin:10px 0;opacity:.35;transition:opacity .3s;text-align:center}
+.karaoke .line.now{opacity:1}
+.karaoke .w{display:inline-block;margin:0 6px;transition:.2s}
+.karaoke .w.hl{color:var(--coral);transform:scale(1.2)}
+.nomotion .cloud,.nomotion *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media (max-width:560px){.panel{padding:16px}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap bar">
-  <a class="logo" href="#home" aria-label="Мой сад дома, на главную">
-    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29V14" stroke="#2f7d4f" stroke-width="2.5" stroke-linecap="round"/><path d="M16 15C8 15 5 9 5 4c7 0 11 4 11 11Z" fill="#5cbf84"/><path d="M16 19c6 0 10-3 11-9-6 0-11 3-11 9Z" fill="#2f7d4f"/></svg>
-    Мой сад дома</a>
-  <nav aria-label="Основная навигация">
-    <a href="#catalog" data-p="catalog">Каталог</a>
-    <a href="#my" data-p="my">Мои растения<span class="cnt" id="navCnt" hidden>0</span></a>
-    <a href="#problems" data-p="problems">Проблемы</a>
-    <a href="#seasons" data-p="seasons">Сезоны</a>
-  </nav>
-</div></header>
-
-<main class="wrap">
-  <div id="view"></div>
-</main>
-
-<footer><div class="wrap">
-  Сроки полива и температуры даны как ориентир при комнатной температуре и средней освещённости. Информация составлена по общим рекомендациям и требует проверки специалистом; о токсичности для животных уточняйте у ветеринара. Данные «Моих растений» хранятся только в вашем браузере.
-</div></footer>
-
-<dialog id="dlg" aria-label="Карточка растения"></dialog>
+<div id="sky"></div>
+<div id="bar" class="hidden"></div>
+<div id="app"></div>
+<div id="rest"><div style="font-size:90px">😴</div><h1>Время отдыха!</h1><div class="sub" style="color:#fff">Пора сделать перерыв — попрыгай, попей воды и посмотри вдаль.</div><button class="btn yellow" id="restBtn">Я отдохнул(а)!</button></div>
 
 <script>
-"use strict";
-/* ---------- данные ---------- */
-const LIGHT=["Полутень","Рассеянный свет","Прямое солнце"];
-const HUM=["Низкая","Средняя","Высокая"];
-const DIFF=["Лёгкое","Среднее","Требовательное"];
-
-const P=[
-{id:"monstera",n:"Монстера",f:"Монстера деликатесная",l:"Monstera deliciosa",li:[0,1],w:3,sum:7,win:14,
- wt:"Поливайте, когда верхние 3–4 см земли просохли. Раз в 2–3 недели протирайте листья.",
- t:[18,27],tw:15,h:2,hn:"Любит опрыскивание и тёплый душ, держите подальше от батарей.",
- feed:"Апрель–сентябрь раз в 2 недели комплексным удобрением для декоративнолиственных.",
- rep:"Молодую — каждый год, взрослую — раз в 2–3 года; нужна опора.",pet:false,pn:"Содержит оксалаты, раздражает пасть и желудок кошек и собак.",
- d:1,iss:[["Жёлтые листья","чаще всего перелив или плохой дренаж"],["Нет разрезов на листьях","мало света или молодой возраст"],["Коричневые кончики","сухой воздух"]],
- tip:"Если воздушные корни мешают, не обрезайте: направьте их в землю или на опору.",pests:["spider","scale","thrips"],hue:150,shape:"broad"},
-{id:"benjamin",n:"Фикус Бенджамина",f:"Фикус",l:"Ficus benjamina",li:[1,2],w:3,sum:7,win:12,
- wt:"Умеренно, давайте верхнему слою подсохнуть. Не переносит ни пересушки, ни застоя воды.",
- t:[18,25],tw:15,h:2,hn:"Опрыскивайте зимой при работающем отоплении.",
- feed:"Весной и летом раз в 2–3 недели.",rep:"Раз в 1–2 года весной; не любит частых перестановок.",
- pet:false,pn:"Сок раздражает кожу и слизистые животных.",d:2,
- iss:[["Опадают листья","сквозняк, переезд или смена света"],["Жёлтые листья","перелив"],["Липкий налёт","щитовка или червец"]],
- tip:"Выберите постоянное место и не поворачивайте горшок: фикус остро реагирует на перемены.",pests:["scale","spider","mealy"],hue:120,shape:"tree"},
-{id:"elastica",n:"Фикус эластика",f:"Каучуконосный фикус",l:"Ficus elastica",li:[1,2],w:3,sum:7,win:14,
- wt:"Когда верх земли просох на 3–4 см. Зимой воды меньше.",
- t:[16,27],tw:12,h:1,hn:"Достаточно обычной влажности; протирайте крупные листья от пыли.",
- feed:"Раз в месяц с апреля по сентябрь.",rep:"Раз в 2 года, горшок немного больше прежнего.",
- pet:false,pn:"Сок раздражает; держите вне доступа питомцев.",d:1,
- iss:[["Листья желтеют и опадают","перелив или холод"],["Нижние листья опали","нехватка света"],["Паутинка на листьях","паутинный клещ"]],
- tip:"Прищипните верхушку, чтобы растение ветвилось, а не тянулось вверх.",pests:["spider","scale","mealy"],hue:95,shape:"broad"},
-{id:"spathi",n:"Спатифиллум",f:"Женское счастье",l:"Spathiphyllum",li:[0,1],w:4,sum:4,win:8,
- wt:"Любит равномерную влажность: поливайте, как только верх земли слегка подсох. Листья поникли — сигнал просить воды.",
- t:[18,27],tw:16,h:3,hn:"Нужен влажный воздух; регулярно опрыскивайте.",
- feed:"Раз в 2 недели в период роста, особенно перед цветением.",rep:"Раз в год весной.",
- pet:false,pn:"Опасен для кошек и собак: раздражает пасть и ЖКТ.",d:1,
- iss:[["Не цветёт","мало света или слишком большой горшок"],["Коричневые кончики","сухой воздух или жёсткая вода"],["Вялые листья","нехватка воды или перелив"]],
- tip:"Отстаивайте воду сутки: от жёсткой воды листья темнеют по краям.",pests:["spider","mealy","thrips"],hue:165,shape:"broad"},
-{id:"sansevieria",n:"Сансевиерия",f:"Щучий хвост, тёщин язык",l:"Sansevieria trifasciata",li:[0,2],w:1,sum:14,win:30,
- wt:"Редко и немного. Лучше недолить, чем перелить; зимой почти не поливайте.",
- t:[15,30],tw:10,h:1,hn:"Сухой воздух не проблема, опрыскивать не нужно.",
- feed:"Раз в 1–2 месяца летом, суккулентным удобрением.",rep:"Раз в 3–4 года, когда корни распирают горшок.",
- pet:false,pn:"Слабо токсична для кошек и собак.",d:0,
- iss:[["Мягкие желтеющие листья","перелив, начало гнили"],["Листья изгибаются","мало света"],["Коричневые пятна","холодная вода или сквозняк"]],
- tip:"Идеальное растение для тёмной комнаты и для тех, кто часто забывает про полив.",pests:["spider","mealy","rot"],hue:140,shape:"sword"},
-{id:"zz",n:"Замиокулькас",f:"Долларовое дерево",l:"Zamioculcas zamiifolia",li:[0,1],w:1,sum:14,win:28,
- wt:"Клубни запасают воду. Поливайте только после полного просыхания земли.",
- t:[16,28],tw:14,h:1,hn:"Сухой воздух переносит хорошо.",
- feed:"Раз в месяц весной и летом, суккулентным удобрением.",rep:"Раз в 2–3 года, горшок лишь чуть больше.",
- pet:false,pn:"Токсичен: раздражает кожу и ЖКТ.",d:0,
- iss:[["Жёлтые стебли","перелив, самая частая причина"],["Чернеют основания","гниль клубней"],["Не растёт","мало света и подкормки"]],
- tip:"Любит игнорирование: при сомнении подождите ещё неделю.",pests:["spider","mealy","rot"],hue:130,shape:"zz"},
-{id:"chlorophytum",n:"Хлорофитум",f:"Паучник",l:"Chlorophytum comosum",li:[0,2],w:3,sum:6,win:12,
- wt:"Умеренно; утолщённые корни запасают воду и терпят пропуск полива.",
- t:[12,27],tw:8,h:1,hn:"Неприхотлив; опрыскивание улучшает вид.",
- feed:"Раз в 2–3 недели весной и летом.",rep:"Ежегодно, пока корни быстро растут.",
- pet:true,pn:"Безопасен для кошек и собак.",d:0,
- iss:[["Коричневые кончики","сухой воздух или соли в воде"],["Бледные листья","много прямого солнца"],["Нет детей","тесный горшок или мало света"]],
- tip:"Укореняйте «деток» прямо в воде или земле, пока они на материнском побеге.",pests:["aphid","spider","gnat"],hue:110,shape:"tuft"},
-{id:"pothos",n:"Эпипремнум",f:"Золотой лотос, потос",l:"Epipremnum aureum",li:[0,1],w:2,sum:7,win:14,
- wt:"Когда земля подсохла на 2–3 см. Выдерживает редкий полив.",
- t:[15,29],tw:12,h:1,hn:"Подойдёт обычная влажность.",
- feed:"Раз в 3–4 недели в сезон роста.",rep:"Раз в 1–2 года.",
- pet:false,pn:"Токсичен для кошек и собак.",d:0,
- iss:[["Жёлтые листья","перелив"],["Пёстрость пропадает","мало света"],["Вытянутые лозы","нехватка света"]],
- tip:"Обрезайте длинные плети: так куст станет гуще, а черенки легко укореняются.",pests:["mealy","spider","gnat"],hue:105,shape:"vine"},
-{id:"aloe",n:"Алоэ вера",f:"Алоэ",l:"Aloe vera",li:[1,2],w:1,sum:14,win:30,
- wt:"Поливайте обильно, но редко, и только когда земля полностью сухая. Вода не должна попадать в розетку.",
- t:[15,28],tw:10,h:1,hn:"Сухой воздух ему подходит.",
- feed:"Раз в 1–2 месяца летом суккулентным удобрением.",rep:"Раз в 2–3 года в широкий горшок с песком.",
- pet:false,pn:"Токсично для кошек и собак.",d:0,
- iss:[["Мягкие, водянистые листья","перелив"],["Вытянулось","мало света"],["Красноватые листья","слишком яркое солнце"]],
- tip:"Зимой держите прохладно и светло, это помогает растению отдохнуть.",pests:["mealy","scale","rot"],hue:140,shape:"sword"},
-{id:"orchid",n:"Орхидея фаленопсис",f:"Орхидея",l:"Phalaenopsis",li:[1],w:2,sum:7,win:10,
- wt:"Погружайте горшок в воду на 10–15 минут, когда корни посеребрились, а кора просохла. Не заливайте точку роста.",
- t:[18,27],tw:15,h:2,hn:"Нужна влажность 50–60 %; хорош проветриваемый воздух.",
- feed:"Специальное удобрение для орхидей раз в 2–3 недели во время роста.",rep:"Раз в 2 года после цветения, в кору.",
- pet:true,pn:"Безопасна для кошек и собак.",d:2,
- iss:[["Не цветёт","нет перепада температур или мало света"],["Вялые, сморщенные листья","корни повреждены или пересохли"],["Опадают бутоны","сквозняк, перемена места"]],
- tip:"Прозрачный горшок поможет следить за состоянием корней.",pests:["mealy","scale","rot"],hue:320,shape:"orchid"},
-{id:"violet",n:"Фиалка",f:"Сенполия",l:"Saintpaulia",li:[1],w:3,sum:5,win:8,
- wt:"Поливайте тёплой водой под корень или через поддон, не мочите листья.",
- t:[18,24],tw:16,h:2,hn:"Не опрыскивайте, поставьте рядом открытую ёмкость с водой.",
- feed:"Удобрение для фиалок раз в 2 недели.",rep:"Раз в год в небольшой горшок.",
- pet:true,pn:"Безопасна для кошек и собак.",d:1,
- iss:[["Не цветёт","мало света или большой горшок"],["Белый налёт","мучнистая роса"],["Пятна на листьях","холодная вода на листьях"]],
- tip:"Раз в неделю поворачивайте горшок, чтобы розетка росла ровно.",pests:["mildew","thrips","mealy"],hue:285,shape:"rosette"},
-{id:"pelargonium",n:"Пеларгония",f:"Герань",l:"Pelargonium",li:[2],w:2,sum:5,win:14,
- wt:"Умеренно, давайте земле просохнуть. Любит поддон, но не застой воды.",
- t:[15,25],tw:8,h:1,hn:"Сухой воздух не страшен; листья не опрыскивать.",
- feed:"Раз в 2 недели в период роста калийным удобрением.",rep:"Раз в 1–2 года весной.",
- pet:false,pn:"Токсична для кошек и собак.",d:0,
- iss:[["Не цветёт","мало света или избыток азота"],["Жёлтые нижние листья","перелив или тесный горшок"],["Серый налёт","серая гниль"]],
- tip:"Весной обрежьте побеги на треть: куст станет пышнее и зацветёт обильнее.",pests:["botrytis","aphid","thrips"],hue:350,shape:"pelargonium"},
-{id:"dracaena",n:"Драцена",f:"Драконово дерево",l:"Dracaena",li:[0,1],w:2,sum:8,win:14,
- wt:"Умеренно; не переносит застоя. Листья не должны терять упругость.",
- t:[18,27],tw:15,h:2,hn:"Опрыскивайте и протирайте листья.",
- feed:"Раз в месяц весной и летом.",rep:"Раз в 2–3 года.",
- pet:false,pn:"Токсична для кошек и собак.",d:1,
- iss:[["Коричневые кончики","сухой воздух или фтор в воде"],["Нижние листья сохнут","естественное старение"],["Жёлтые листья","перелив"]],
- tip:"Поливайте отстоянной или фильтрованной водой.",pests:["spider","scale","thrips"],hue:135,shape:"tree"},
-{id:"cactus",n:"Кактусы",f:"Кактус",l:"Cactaceae",li:[2],w:1,sum:14,win:45,
- wt:"Летом редко, зимой почти не поливайте. Земля должна полностью просохнуть.",
- t:[15,32],tw:8,h:1,hn:"Сухой воздух в норме.",
- feed:"Раз в месяц летом специальным удобрением.",rep:"Раз в 2–3 года, в песчаную смесь.",
- pet:true,pn:"Большинство безопасны, но колючки травмируют.",d:0,
- iss:[["Мягкое основание","гниль от перелива"],["Вытягивается","мало света"],["Коричневые пробковые пятна","ожог или старение"]],
- tip:"Зимой дайте покой: прохладно (8–12 °C), светло и сухо — весной зацветёт.",pests:["mealy","scale","rot"],hue:90,shape:"cactus"},
-{id:"hoya",n:"Хойя",f:"Восковой плющ",l:"Hoya carnosa",li:[1,2],w:2,sum:10,win:21,
- wt:"Поливайте, когда земля просохла; толстые листья хранят воду.",
- t:[16,27],tw:12,h:1,hn:"Подойдёт обычная влажность, иногда душ.",
- feed:"Раз в месяц весной и летом.",rep:"Раз в 2–3 года; любит тесный горшок.",
- pet:true,pn:"Безопасна для кошек и собак.",d:1,
- iss:[["Не цветёт","мало света"],["Сморщенные листья","недолив или повреждённые корни"],["Опадают бутоны","перемещение горшка"]],
- tip:"Не срезайте цветоножки: на них цветы появятся снова.",pests:["mealy","scale","aphid"],hue:160,shape:"vine"},
-{id:"calathea",n:"Калатея",f:"Марантовые, молитвенное растение",l:"Calathea",li:[0,1],w:4,sum:5,win:9,
- wt:"Земля слегка влажная, но без застоя. Вода мягкая и тёплая.",
- t:[18,26],tw:17,h:3,hn:"Влажный воздух обязателен, подойдёт увлажнитель.",
- feed:"Раз в 2–3 недели вполсилы.",rep:"Раз в год весной.",
- pet:true,pn:"Безопасна для кошек и собак.",d:2,
- iss:[["Скручиваются листья","сухой воздух или недолив"],["Коричневые края","жёсткая вода или сухость"],["Бледные пятна","прямое солнце"]],
- tip:"Не терпит сквозняков и прямого солнца; идеально ставить подальше от окна.",pests:["spider","thrips","mealy"],hue:175,shape:"broad"}
+'use strict';
+/* ============ DATA ============ */
+const AGES={
+  cubs:{name:'Cubs',range:'3–5',emoji:'🐣'},
+  explorers:{name:'Explorers',range:'6–8',emoji:'🧭'},
+  heroes:{name:'Heroes',range:'9–12',emoji:'🦸'}
+};
+const ISLANDS=[
+  {id:'hello',title:'Hello & Me',ru:'Привет и я',ic:'👋',guide:'🦊',deco:['🌸','🌼'],
+   words:[
+    {w:'hello',e:'👋',ru:'привет',s:'Hello! I am happy.'},
+    {w:'smile',e:'😊',ru:'улыбка',s:'I smile at my friend.'},
+    {w:'friend',e:'🤝',ru:'друг',s:'You are my friend.'},
+    {w:'name',e:'🏷️',ru:'имя',s:'My name is Sam.'},
+    {w:'yes',e:'👍',ru:'да',s:'Yes, I like it!'},
+    {w:'sad',e:'😢',ru:'грустный',s:'The kitten is sad.'},
+    {w:'happy',e:'😀',ru:'счастливый',s:'I am very happy.'},
+    {w:'sleep',e:'😴',ru:'спать',s:'The baby can sleep.'}],
+   song:['Hello, hello, how are you?','I am happy, yes I do!','Smile, smile, a friend is near,','Sleep well, sleep well, never fear!']},
+  {id:'animals',title:'Animals',ru:'Животные',ic:'🐱',guide:'🐱',deco:['🌳','🦋'],
+   words:[
+    {w:'cat',e:'🐱',ru:'кошка',s:'The cat is soft.'},
+    {w:'dog',e:'🐶',ru:'собака',s:'The dog can run.'},
+    {w:'rabbit',e:'🐰',ru:'кролик',s:'The rabbit can jump.'},
+    {w:'bird',e:'🐦',ru:'птица',s:'The bird can fly.'},
+    {w:'fish',e:'🐟',ru:'рыба',s:'The fish can swim.'},
+    {w:'horse',e:'🐴',ru:'лошадь',s:'The horse is fast.'},
+    {w:'cow',e:'🐮',ru:'корова',s:'The cow says moo.'},
+    {w:'duck',e:'🦆',ru:'утка',s:'The duck says quack.'}],
+   song:['Cat, cat, meow, meow, meow,','Dog, dog, woof, woof, woof,','Duck, duck, quack, quack, quack,','Cow says moo, and we go back!']},
+  {id:'colours',title:'Colours & Shapes',ru:'Цвета и формы',ic:'🎨',guide:'🦄',deco:['🌈','✨'],
+   words:[
+    {w:'red',e:'🔴',ru:'красный',s:'The ball is red.'},
+    {w:'blue',e:'🔵',ru:'синий',s:'The sky is blue.'},
+    {w:'yellow',e:'🟡',ru:'жёлтый',s:'The sun is yellow.'},
+    {w:'green',e:'🟢',ru:'зелёный',s:'The grass is green.'},
+    {w:'purple',e:'🟣',ru:'фиолетовый',s:'I like purple.'},
+    {w:'orange',e:'🟠',ru:'оранжевый',s:'The ball is orange.'},
+    {w:'star',e:'⭐',ru:'звезда',s:'I see a star.'}],
+   song:['Red and blue and yellow too,','Green and purple, orange new,','Star above shines so bright,','Colours make the world delight!']}
 ];
-
-const SYM=[
-{id:"yellow",n:"Жёлтые листья",c:[["Перелив","Земля мокрая, листья мягкие, жёлтые снизу.","Дайте земле просохнуть, проверьте дренаж, при гнили пересадите."],["Нехватка питания","Желтеют старые листья, рост замедлен.","Подкормите в сезон роста."],["Недостаток света","Листья бледные, рост слабый.","Переставьте ближе к окну."],["Естественное старение","Желтеют единичные нижние листья.","Удалите листья, ничего больше не нужно."]]},
-{id:"brown",n:"Коричневые кончики",c:[["Сухой воздух","Кончики сухие, хрупкие, особенно зимой.","Увлажняйте воздух, уберите от батареи."],["Соли в воде","На земле белый налёт.","Поливайте отстоянной или фильтрованной водой."],["Недолив","Земля пересохла, листья вялые.","Полейте, вымочите ком."],["Ожог","Пятна на стороне окна.","Притените от прямого солнца."]]},
-{id:"drop",n:"Листья опадают",c:[["Сквозняк и перемена места","Листья падают быстро после перестановки.","Выберите постоянное тёплое место."],["Перелив или недолив","Земля слишком мокрая или сухая.","Наладьте режим полива."],["Мало света зимой","Падают нижние листья.","Переставьте на светлое место."],["Вредители","Липкость, налёт, точки.","Осмотрите растение, обработайте."]]},
-{id:"wilt",n:"Листья вялые",c:[["Недолив","Земля сухая, ком отходит от стенок.","Полейте обильно, дайте стечь."],["Перелив и гниль корней","Земля мокрая, но листья вялые.","Достаньте растение, обрежьте гнилое, пересадите."],["Жара","Вянет в жаркие часы.","Притените, проветрите."]]},
-{id:"sticky",n:"Липкий налёт",c:[["Тля","Колонии на молодых побегах.","Смойте душем, обработайте инсектицидом."],["Щитовка","Бурые бугорки на стеблях.","Снимите вручную, обработайте."],["Мучнистый червец","Белые комочки в пазухах.","Протрите спиртом, обработайте."]]},
-{id:"web",n:"Паутинка и точки",c:[["Паутинный клещ","Тонкая паутина, светлые точки.","Увлажните, обработайте акарицидом."]]},
-{id:"white",n:"Белый налёт",c:[["Мучнистая роса","Мучнистый налёт на листьях.","Удалите поражённое, обработайте фунгицидом, проветрите."],["Мучнистый червец","Белые ватные комочки.","Протрите спиртом."],["Соли на земле","Белая корка на поверхности.","Замените верхний слой."]]},
-{id:"gnat",n:"Мошки над землёй",c:[["Грибной комарик","Мошки при поливе, влажная земля.","Подсушите землю, добавьте слой песка, ловушки."]]},
-{id:"nobloom",n:"Не цветёт",c:[["Мало света","Листья тёмные, побеги тянутся.","Переставьте ближе к окну."],["Слишком большой горшок","Растёт корень, а не цветы.","Пересадите в меньший."],["Нет зимнего покоя","Растение не отдыхало.","Дайте прохладу и меньше воды зимой."]]},
-{id:"leggy",n:"Растение вытянулось",c:[["Нехватка света","Длинные расстояния между листьями.","Ближе к свету, прищипните верхушку."],["Избыток азота","Мягкий, быстрый рост.","Сократите подкормку."]]},
-{id:"spots",n:"Пятна на листьях",c:[["Ожог","Сухие светлые пятна.","Притените от прямого солнца."],["Грибковая инфекция","Тёмные пятна с ободком.","Удалите листья, обработайте фунгицидом."],["Холодная вода","Пятна после полива.","Поливайте тёплой водой."]]}
+const SOON=[{t:'Numbers',ic:'🔢'},{t:'Family',ic:'👨‍👩‍👧'},{t:'Food',ic:'🍎'}];
+const STICKERS=['🦊','🐱','🐲','🤖','🦄','🐼','🦁','🐙','🐸','🦋','🚀','🌈'];
+const STICKER_AT=[1,3,5,7,9,12,15,18,21,24,28,32];
+const ACTS=[
+  {id:'lesson',ic:'📖',t:'Урок',en:'Lesson'},
+  {id:'listen',ic:'👂',t:'Слушай и выбирай',en:'Listen'},
+  {id:'memory',ic:'🃏',t:'Найди пару',en:'Match'},
+  {id:'balloon',ic:'🎈',t:'Лопни шарик',en:'Pop!'},
+  {id:'build',ic:'🔤',t:'Собери слово',en:'Build'},
+  {id:'song',ic:'🎵',t:'Песня',en:'Song'}
 ];
+const BALLOON_COLORS=['#FF6B6B','#3DA5FF','#9B6BFF','#3DDC97','#ff9f43','#f368e0'];
 
-const PESTS=[
-{id:"spider",n:"Паутинный клещ",look:"Тонкая паутина, светлые точки на листьях, листья тускнеют и скручиваются.",why:"Сухой тёплый воздух.",do:"Повысьте влажность, промойте листья, обработайте акарицидом."},
-{id:"aphid",n:"Тля",look:"Мелкие зелёные или чёрные насекомые на молодых побегах, липкий налёт.",why:"Свежие побеги, избыток азота.",do:"Смойте душем, повторите обработку инсектицидом."},
-{id:"scale",n:"Щитовка",look:"Коричневые выпуклые бугорки на стеблях и листьях, липкость.",why:"Привнесены с новым растением.",do:"Снимите вручную ватой со спиртом, обработайте инсектицидом."},
-{id:"mealy",n:"Мучнистый червец",look:"Белые ватные комочки в пазухах листьев.",why:"Теплый сухой воздух, новые растения.",do:"Протрите спиртом, обработайте инсектицидом, повторите через неделю."},
-{id:"thrips",n:"Трипсы",look:"Серебристые штрихи на листьях, чёрные точки, деформированные бутоны.",why:"Сухой воздух, тепло.",do:"Изолируйте растение, обработайте инсектицидом, повторите."},
-{id:"gnat",n:"Грибной комарик",look:"Мелкие мошки у земли, личинки в мокром грунте.",why:"Постоянно мокрая земля.",do:"Подсушите землю, песок поверх, липкие ловушки."}
-];
-const DIS=[
-{id:"rot",n:"Корневая гниль",look:"Земля мокрая, корни коричневые и мягкие, листья вянут, запах.",why:"Перелив, плохой дренаж.",do:"Достаньте растение, обрежьте гнилое, пересадите в свежий грунт, обработайте фунгицидом."},
-{id:"mildew",n:"Мучнистая роса",look:"Белый мучнистый налёт на листьях и бутонах.",why:"Высокая влажность и плохой воздухообмен.",do:"Удалите поражённое, проветрите, обработайте фунгицидом."},
-{id:"botrytis",n:"Серая гниль",look:"Серый пушистый налёт на листьях, цветах, стеблях.",why:"Сырость, холод, густые заросли.",do:"Удалите поражённое, уменьшите полив, проветривайте, фунгицид."}
-];
-PESTS.concat(DIS).forEach(x=>x.disease=DIS.includes(x));
+/* ============ STATE ============ */
+const KEY='englishland.v1';
+const S=load();
+function load(){
+  const d={age:null,avatar:'🦊',stars:{},set:{music:true,voice:100,sfx:80,musicVol:35,translate:false,rest:0}};
+  try{const j=JSON.parse(localStorage.getItem(KEY)||'null');if(j){Object.assign(d,j);d.set=Object.assign({music:true,voice:100,sfx:80,musicVol:35,translate:false,rest:0},j.set||{})}}catch(e){}
+  return d;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=s=>document.querySelector(s);
+const app=$('#app'), bar=$('#bar');
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const myStars=()=>(S.stars[S.age]=S.stars[S.age]||{});
+const totalStars=()=>Object.values(S.stars).reduce((t,o)=>t+Object.values(o).reduce((a,b)=>a+b,0),0);
+const islandStars=i=>{const m=myStars();return ACTS.reduce((t,a)=>t+(m[i.id+':'+a.id]||0),0)};
+const unlocked=idx=>idx===0||(myStars()[ISLANDS[idx-1].id+':lesson']||0)>0;
+const showText=()=>S.age!=='cubs';
+let timers=[];
+function later(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
+function clearTimers(){timers.forEach(clearTimeout);timers=[];karaokeStop=true;if('speechSynthesis' in window)speechSynthesis.cancel()}
 
-const RULES=["Проверяйте землю пальцем на глубину 2–3 см прежде чем поливать.","Обеспечьте дренаж: отверстия в горшке и слив лишней воды из поддона.","Поливайте водой комнатной температуры, отстоянной не менее суток."];
-const FIRST=["Изолируйте растение от остальных.","Осмотрите листья, стебли и землю, переверните лист.","Удалите повреждённые части чистым инструментом.","Обрабатывайте препаратами только по инструкции, в проветриваемом месте, вдали от детей и питомцев."];
+/* ============ SOUND ============ */
+let ac=null,musicTimer=null,musicStep=0;
+function ctx(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(ac&&ac.state==='suspended')ac.resume();return ac}
+function tone(f,d=.15,type='sine',v=.2,when=0){
+  const c=ctx();if(!c||S.set.sfx<=0)return;
+  const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+when;
+  o.type=type;o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v*S.set.sfx/100,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.05);
+}
+const sfx={
+  tap(){tone(660,.08,'sine',.15)},
+  ok(){[523,659,784].forEach((f,i)=>tone(f,.2,'triangle',.22,i*.09))},
+  try(){tone(330,.18,'sine',.15);tone(294,.25,'sine',.12,.12)},
+  pop(){tone(900,.07,'square',.12);tone(500,.12,'sine',.15,.03)},
+  win(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.28,'triangle',.22,i*.1))},
+  flip(){tone(520,.06,'sine',.12)}
+};
+const SCALE=[261.63,293.66,329.63,392,440,523.25,587.33,659.25];
+function musicOn(){
+  clearInterval(musicTimer);
+  if(!S.set.music||S.set.musicVol<=0)return;
+  musicTimer=setInterval(()=>{
+    const c=ctx();if(!c||c.state!=='running')return;
+    const pat=[0,2,4,2,5,4,2,1,0,2,4,7,5,4,2,0];
+    const n=SCALE[pat[musicStep%pat.length]];musicStep++;
+    const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;
+    o.type='sine';o.frequency.value=n;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.12*S.set.musicVol/100,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+.9);
+    o.connect(g).connect(c.destination);o.start(t);o.stop(t+1);
+  },480);
+}
+document.addEventListener('pointerdown',()=>{ctx();if(!musicTimer)musicOn()},{once:true});
 
-const SEASONS=[
-{n:"Весна",m:[2,3,4],c:"#4caf6a",pol:"Постепенно увеличивайте полив.",feed:"Начните подкормки раз в 2–4 недели.",rep:"Лучшее время для пересадки.",light:"Света больше, привыкайте постепенно.",hum:"Опрыскивайте по мере потепления.",todo:"Обрезка и черенкование."},
-{n:"Лето",m:[5,6,7],c:"#e0a415",pol:"Чаще, но по состоянию земли.",feed:"Регулярно по схеме на удобрении.",rep:"Только в экстренных случаях.",light:"Притеняйте южные окна в полдень.",hum:"Опрыскивание и проветривание.",todo:"Следите за вредителями, выносите на балкон."},
-{n:"Осень",m:[8,9,10],c:"#d4642a",pol:"Сокращайте частоту.",feed:"Постепенно прекращайте.",rep:"Не пересаживайте.",light:"Света становится меньше, переставьте ближе к окну.",hum:"Включается отопление, следите за сухостью.",todo:"Занесите растения с балкона до холодов."},
-{n:"Зима",m:[11,0,1],c:"#3b7ec0",pol:"Редко, по состоянию земли.",feed:"Не подкармливайте.",rep:"Не пересаживайте.",light:"Максимально светлое место, подсветка.",hum:"Подальше от батарей, увлажняйте воздух.",todo:"Проверяйте на вредителей."}
-];
+let voice=null;
+function pickVoice(){
+  if(!('speechSynthesis' in window))return null;
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;
+}
+function say(text,opts={}){
+  return new Promise(res=>{
+    if(!('speechSynthesis' in window)||S.set.voice<=0){res();return}
+    try{
+      if(!opts.queue)speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      voice=pickVoice();if(voice)u.voice=voice;
+      u.lang='en-GB';u.rate=opts.rate||.82;u.pitch=1.1;u.volume=S.set.voice/100;
+      u.onend=u.onerror=()=>res();
+      speechSynthesis.speak(u);
+      setTimeout(res,Math.max(2500,text.length*160));
+    }catch(e){res()}
+  });
+}
+if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>{voice=pickVoice()};
 
-/* ---------- иллюстрации ---------- */
-function art(p,w,h){
-  const hs=p.hue,c1=`hsl(${hs},45%,38%)`,c2=`hsl(${hs},50%,52%)`,c3=`hsl(${hs},40%,28%)`;
-  const bg=`hsl(${hs},45%,90%)`,pot=`#c47a4a`;
-  const potSvg=`<path d="M70 160h60l-6 34H76z" fill="${pot}"/><rect x="66" y="154" width="68" height="10" rx="3" fill="#a9623a"/>`;
-  let s="";
-  switch(p.shape){
-   case"broad":s=`<path d="M100 156V80" stroke="${c3}" stroke-width="4"/><ellipse cx="72" cy="90" rx="30" ry="22" fill="${c1}" transform="rotate(-25 72 90)"/><ellipse cx="130" cy="82" rx="30" ry="22" fill="${c2}" transform="rotate(25 130 82)"/><ellipse cx="100" cy="56" rx="26" ry="30" fill="${c1}"/><ellipse cx="80" cy="128" rx="24" ry="14" fill="${c2}" transform="rotate(-20 80 128)"/><ellipse cx="124" cy="126" rx="24" ry="14" fill="${c1}" transform="rotate(20 124 126)"/>`;break;
-   case"tree":s=`<path d="M100 156V70" stroke="#7a5a3a" stroke-width="6"/><circle cx="100" cy="52" r="32" fill="${c1}"/><circle cx="72" cy="80" r="24" fill="${c2}"/><circle cx="128" cy="80" r="24" fill="${c2}"/><circle cx="100" cy="94" r="20" fill="${c1}"/>`;break;
-   case"sword":s=[[-22,95],[0,110],[22,95],[-10,85],[12,85]].map((a,i)=>`<path d="M${100+a[0]*.4} 156Q${100+a[0]*2} ${156-a[1]*.6} ${100+a[0]*1.2} ${156-a[1]-20}Q${100+a[0]*.2} ${156-a[1]*.5} ${106+a[0]*.4} 156Z" fill="${i%2?c2:c1}"/>`).join("");break;
-   case"zz":s=[-36,-18,0,18,36].map((a,i)=>`<path d="M100 156Q${100+a*1.4} 120 ${100+a*1.8} ${60+Math.abs(a)}" stroke="${c3}" stroke-width="3" fill="none"/><ellipse cx="${100+a*1.8}" cy="${64+Math.abs(a)}" rx="13" ry="18" fill="${i%2?c2:c1}" transform="rotate(${a} ${100+a*1.8} ${64+Math.abs(a)})"/>`).join("");break;
-   case"tuft":s=[-40,-24,-8,8,24,40].map((a,i)=>`<path d="M100 156Q${100+a*1.5} 70 ${100+a*2.4} ${100+Math.abs(a)}" stroke="${i%2?c2:c1}" stroke-width="9" stroke-linecap="round" fill="none"/>`).join("")+`<path d="M130 100Q158 96 160 126" stroke="${c3}" stroke-width="2" fill="none"/><circle cx="160" cy="128" r="9" fill="${c2}"/>`;break;
-   case"vine":s=`<path d="M100 156Q60 110 76 70M100 156Q140 120 128 74" stroke="${c3}" stroke-width="3" fill="none"/><path d="M76 70Q150 40 176 100" stroke="${c3}" stroke-width="2" fill="none"/>`+[[76,70],[84,100],[128,74],[124,104],[150,64],[168,88],[66,118],[98,126]].map((a,i)=>`<path d="M${a[0]} ${a[1]}q-14 -4 -16 12q14 6 16 -12z" fill="${i%2?c2:c1}" transform="scale(1.2) translate(${-a[0]*.17} ${-a[1]*.17})"/>`).join("");break;
-   case"cactus":s=`<rect x="84" y="62" width="32" height="96" rx="16" fill="${c1}"/><path d="M84 112h-14a8 8 0 0 1-8-8V84a8 8 0 0 1 16 0v8h6z" fill="${c2}"/><path d="M116 100h14a8 8 0 0 0 8-8V80a8 8 0 0 0-16 0v6h-6z" fill="${c2}"/><circle cx="100" cy="58" r="7" fill="#ee82a1"/>`;break;
-   case"rosette":s=[0,60,120,180,240,300].map((a,i)=>`<ellipse cx="100" cy="132" rx="30" ry="12" fill="${i%2?c2:c1}" transform="rotate(${a} 100 140)"/>`).join("")+`<g fill="#a265c9"><circle cx="86" cy="116" r="7"/><circle cx="106" cy="108" r="7"/><circle cx="122" cy="120" r="7"/></g>`;break;
-   case"orchid":s=`<path d="M100 156q-6-50 0-90q30-6 38-40" stroke="${c3}" stroke-width="3" fill="none"/><ellipse cx="78" cy="140" rx="30" ry="12" fill="${c1}" transform="rotate(-12 78 140)"/><ellipse cx="124" cy="140" rx="30" ry="12" fill="${c2}" transform="rotate(12 124 140)"/><g fill="#f4d2e6"><circle cx="106" cy="76" r="12"/><circle cx="124" cy="50" r="12"/><circle cx="138" cy="28" r="10"/></g><g fill="#c24b87"><circle cx="106" cy="76" r="4"/><circle cx="124" cy="50" r="4"/><circle cx="138" cy="28" r="3.5"/></g>`;break;
-   case"pelargonium":s=`<path d="M100 156V84M100 120L74 94M100 118L126 92" stroke="${c3}" stroke-width="3"/><circle cx="74" cy="100" r="18" fill="${c1}"/><circle cx="126" cy="98" r="18" fill="${c2}"/><circle cx="100" cy="124" r="20" fill="${c1}"/><g fill="#e0476d"><circle cx="100" cy="64" r="11"/><circle cx="82" cy="72" r="9"/><circle cx="118" cy="72" r="9"/><circle cx="100" cy="82" r="9"/></g>`;break;
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}
+function confetti(n=40){
+  const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const em=['🎉','⭐','✨','🎈','💛','💙','💚','🩷'];
+  for(let i=0;i<(calm?8:n);i++){
+    const d=document.createElement('div');d.className='conf';d.textContent=em[i%em.length];
+    d.style.left=Math.random()*100+'vw';d.style.setProperty('--dx',(Math.random()*160-80)+'px');d.style.setProperty('--rot',(Math.random()*720-360)+'deg');
+    d.style.animationDuration=(1.4+Math.random()*1.2)+'s';d.style.animationDelay=Math.random()*.4+'s';d.style.fontSize=(18+Math.random()*20)+'px';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),3200);
   }
-  return `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Рисунок: ${p.n}"><rect width="200" height="200" fill="${bg}"/>${s}${potSvg}</svg>`;
-}
-const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const byId=id=>P.find(p=>p.id===id);
-
-/* ---------- хранилище ---------- */
-const KEY="moy-sad-dom";
-let mine=[];
-try{mine=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){mine=[]}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(e){}};
-const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-const inMine=id=>mine.some(m=>m.id===id);
-const toDay=s=>{const[a,b,c]=s.split("-").map(Number);return Date.UTC(a,b-1,c)/864e5};
-function interval(p){const m=new Date().getMonth();
-  if([10,11,0,1].includes(m))return p.win;
-  if(m===2||m===9)return Math.round((p.win+p.sum)/2);
-  return p.sum}
-function status(m){const p=byId(m.id),iv=interval(p),since=Math.round(toDay(today())-toDay(m.last)),left=iv-since;
-  return{p,iv,since,left,pct:Math.min(100,Math.max(0,since/iv*100))}}
-function plural(n,a,b,c){n=Math.abs(n);const k=n%100,r=n%10;return k>10&&k<20?c:r===1?a:r>1&&r<5?b:c}
-
-/* ---------- представления ---------- */
-const view=document.getElementById("view"),dlg=document.getElementById("dlg");
-const F={q:"",light:null,easy:false,pet:false};
-const sTitle=(t,s)=>`<h2>${t}</h2><p class="sub">${s}</p>`;
-
-function home(){
-  const five=["monstera","sansevieria","cactus","orchid","pelargonium"].map(byId);
-  return `<section class="hero" id="home"><div>
-    <h1>Мой сад дома</h1>
-    <p class="lead">Всё об уходе за домашними цветами: когда поливать, сколько света и тепла нужно и что делать, если растение заболело.</p>
-    <div class="btns"><a class="btn pri" href="#catalog">Открыть каталог</a><a class="btn sec" href="#my">Мои растения</a></div></div>
-    <div class="shelf"><div class="row">${five.map(p=>`<button data-open="${p.id}" aria-label="Открыть: ${E(p.n)}">${art(p)}</button>`).join("")}</div><p class="hint">Нажмите на растение, чтобы узнать об уходе</p></div></section>
-    <section class="page" aria-labelledby="r">${sTitle("Три правила для любого растения","Если запомнить только это, большинство проблем вас обойдёт.").replace("<h2>","<h2 id=r>")}<ol class="rules">${RULES.map(r=>`<li>${E(r)}</li>`).join("")}</ol></section>`;
 }
 
-function tags(p){return `<span class="tag w">💧 ${p.w}/5</span><span class="tag s">☀ ${LIGHT[p.li[0]]}${p.li[1]!==p.li[0]?" — "+LIGHT[p.li[p.li.length-1]].toLowerCase():""}</span><span class="tag t">🌡 ${p.t[0]}–${p.t[1]} °C</span>`}
-function match(p){
-  const q=F.q.trim().toLowerCase();
-  if(q&&![p.n,p.f,p.l].some(x=>x.toLowerCase().includes(q)))return false;
-  if(F.light!==null&&!(F.light>=p.li[0]&&F.light<=p.li[p.li.length-1]))return false;
-  if(F.easy&&p.d>0)return false;
-  if(F.pet&&!p.pet)return false;
-  return true}
-function catalog(){
-  return `<section class="page">${sTitle("Каталог растений","Найдите растение по названию, свету или безопасности для питомцев.")}
-  <div class="tools"><label class="sr" for="q">Поиск</label><input type="search" id="q" placeholder="Поиск: монстера, герань, женское счастье…" value="${E(F.q)}"></div>
-  <div class="chips" role="group" aria-label="Фильтры">
-   <button class="chip" data-light="" aria-pressed="${F.light===null}">Любой свет</button>
-   ${LIGHT.map((l,i)=>`<button class="chip" data-light="${i}" aria-pressed="${F.light===i}">${l}</button>`).join("")}
-   <button class="chip" data-f="easy" aria-pressed="${F.easy}">Для новичков</button>
-   <button class="chip" data-f="pet" aria-pressed="${F.pet}">Безопасно для питомцев</button></div>
-  <div id="list"></div></section>`}
-function drawList(){
-  const l=P.filter(match),el=document.getElementById("list");
-  el.innerHTML=`<p class="count" role="status">Найдено: ${l.length} ${plural(l.length,"растение","растения","растений")}</p>`+
-   (l.length?`<div class="grid">${l.map(p=>`<button class="card" data-open="${p.id}"><div class="pic">${art(p)}${inMine(p.id)?'<span class="badge">В моём саду</span>':""}</div><div class="body"><h3>${E(p.n)}</h3><div class="lat">${E(p.l)}</div><div class="meta">${tags(p)}</div></div></button>`).join("")}</div>`
-   :`<div class="empty"><p>Ничего не найдено.</p><button class="btn pri" data-reset>Сбросить фильтры</button></div>`)}
+/* ============ BACKGROUND ============ */
+(function sky(){
+  const s=$('#sky');let h='';
+  for(let i=0;i<7;i++)h+=`<div class="cloud" style="top:${Math.random()*70}%;animation-duration:${60+Math.random()*80}s;animation-delay:-${Math.random()*100}s;font-size:${60+Math.random()*70}px">☁️</div>`;
+  for(let i=0;i<12;i++)h+=`<div class="sparkle" style="top:${Math.random()*95}%;left:${Math.random()*98}%;animation-delay:-${Math.random()*3}s">✨</div>`;
+  s.innerHTML=h;
+  addEventListener('pointermove',e=>{
+    s.style.transform=`translate(${(e.clientX/innerWidth-.5)*-14}px,${(e.clientY/innerHeight-.5)*-10}px) scale(1.05)`;
+  });
+})();
 
-function myView(){
-  const items=mine.map(status).sort((a,b)=>a.left-b.left);
-  const due=items.filter(s=>s.left<=0).length;
-  let h=`<section class="page">${sTitle("Мои растения","Добавьте растения из каталога, и сайт подскажет, когда их поливать. Интервалы учитывают время года.")}`;
-  if(!items.length)return h+`<div class="empty"><p>Пока пусто. Откройте карточку растения и нажмите «Добавить в мой сад».</p><a class="btn pri" href="#catalog">В каталог</a></div></section>`;
-  h+=`<div class="summary" role="status">${due?`Пора поливать: ${due} ${plural(due,"растение","растения","растений")}`:"Сегодня поливать никого не нужно 🌿"}</div>`;
-  h+=items.map(s=>{const late=s.left<0,tdy=s.left===0;
-   const t=late?`Просрочено на ${-s.left} ${plural(-s.left,"день","дня","дней")}`:tdy?"Полить сегодня":`Через ${s.left} ${plural(s.left,"день","дня","дней")}`;
-   return `<article class="my"><div class="th">${art(s.p)}</div><div>
-    <h3><a href="#" data-open="${s.p.id}" style="color:inherit">${E(s.p.n)}</a></h3>
-    <div class="st ${late?"late":tdy?"today":"ok"}">${t}</div>
-    <div class="bar2" role="progressbar" aria-label="Прогресс до полива" aria-valuenow="${Math.round(s.pct)}" aria-valuemin="0" aria-valuemax="100"><i class="${late?"late":""}" style="width:${s.pct}%"></i></div>
-    <div class="row2"><span>Интервал: каждые ${s.iv} дн.</span><label>Последний полив <input type="date" value="${mineOf(s.p.id).last}" max="${today()}" data-date="${s.p.id}"></label>
-    <button class="btn pri sm" data-water="${s.p.id}">Полил(а) сегодня</button><button class="link" data-del="${s.p.id}">Убрать</button></div></div></article>`}).join("");
-  return h+"</section>"}
-const mineOf=id=>mine.find(m=>m.id===id);
-
-function problems(){
-  let h=`<section class="page">${sTitle("Проблемы растений","Выберите, что вы видите: покажем вероятные причины от частых к редким.")}
-  <div class="sym" role="group" aria-label="Симптомы">${SYM.map(s=>`<button data-sym="${s.id}" aria-pressed="false">${s.n}</button>`).join("")}</div>
-  <div id="causes" aria-live="polite"></div>
-  <h3 class="sec-t">Что делать при любой проблеме</h3><ol class="rules">${FIRST.map(r=>`<li>${E(r)}</li>`).join("")}</ol>
-  <div class="note">Препараты (акарицид, инсектицид, фунгицид) применяйте строго по инструкции, в проветриваемом месте, вдали от детей и питомцев.</div>
-  <h3 class="sec-t">Вредители</h3><div class="pgrid">${PESTS.map(pc).join("")}</div>
-  <h3 class="sec-t">Болезни</h3><div class="pgrid">${DIS.map(pc).join("")}</div></section>`;
-  return h}
-const pc=x=>`<article class="pc" id="pc-${x.id}"><h3>${E(x.n)}</h3><dl><dt>Как выглядит</dt><dd>${E(x.look)}</dd><dt>Почему появляется</dt><dd>${E(x.why)}</dd><dt>Что делать</dt><dd>${E(x.do)}</dd></dl></article>`;
-
-function seasons(){
-  const m=new Date().getMonth(),cur=SEASONS.find(s=>s.m.includes(m));
-  return `<section class="page">${sTitle("Уход по сезонам","Растения живут в ритме года: зимой отдыхают, весной и летом растут.")}
-  <div class="seasons">${SEASONS.map(s=>`<article class="season${s===cur?" now":""}" style="--c:${s.c}"><h3>${s.n}${s===cur?'<span class="now-t">Сейчас</span>':""}</h3><dl>
-   <dt>Полив</dt><dd>${s.pol}</dd><dt>Подкормка</dt><dd>${s.feed}</dd><dt>Пересадка</dt><dd>${s.rep}</dd><dt>Свет</dt><dd>${s.light}</dd><dt>Влажность</dt><dd>${s.hum}</dd><dt>Особые дела</dt><dd>${s.todo}</dd></dl></article>`).join("")}</div></section>`}
-
-/* ---------- карточка ---------- */
-function openPlant(id){
-  const p=byId(id);if(!p)return;
-  const sc=(n,max,cls)=>`<div class="scale ${cls||""}" aria-hidden="true">${Array.from({length:max},(_,i)=>`<i class="${i<n?"on":""}"></i>`).join("")}</div>`;
-  const lo=p.li[0],hi=p.li[p.li.length-1];
-  const lightScale=`<div class="scale light" aria-hidden="true">${[0,1,2].map(i=>`<i class="${i>=lo&&i<=hi?"on":""}"></i>`).join("")}</div><div class="tl" aria-hidden="true"><span>Полутень</span><span>Рассеянный</span><span>Солнце</span></div>`;
-  const left=(p.t[0]-5)/30*100,wid=(p.t[1]-p.t[0])/30*100;
-  const added=inMine(id);
-  dlg.innerHTML=`<div class="dhead">${art(p)}<button class="x" data-close aria-label="Закрыть">×</button></div><div class="dbody">
-   <h2 class="ttl">${E(p.n)}</h2><div class="lat" style="color:var(--muted)"><i>${E(p.l)}</i> · ${E(p.f)} · Уход: ${DIFF[p.d].toLowerCase()}</div>
-   <div class="dgrid">
-   <div class="blk"><h4>Полив</h4>${sc(p.w,5)}<p>Потребность в воде: ${p.w} из 5</p><p>Летом — раз в ${p.sum} дн., зимой — раз в ${p.win} дн.</p><p>${E(p.wt)}</p></div>
-   <div class="blk"><h4>Свет</h4>${lightScale}<p>${lo===hi?LIGHT[lo]:LIGHT[lo]+" — "+LIGHT[hi].toLowerCase()}</p></div>
-   <div class="blk"><h4>Температура</h4><div class="temp" role="img" aria-label="Комфортно ${p.t[0]}–${p.t[1]} °C"><b style="left:${left}%;width:${wid}%"></b></div><div class="tl" aria-hidden="true"><span>5 °C</span><span>35 °C</span></div><p>Комфортно: ${p.t[0]}–${p.t[1]} °C. Зимой не ниже ${p.tw} °C.</p></div>
-   <div class="blk"><h4>Влажность воздуха</h4>${sc(p.h,3,"hum")}<p>${HUM[p.h-1]}. ${E(p.hn)}</p></div>
-   <div class="blk"><h4>Подкормка</h4><p>${E(p.feed)}</p></div>
-   <div class="blk"><h4>Пересадка</h4><p>${E(p.rep)}</p></div>
-   <div class="blk"><h4>Питомцы</h4><p class="${p.pet?"safe":"danger"}">${p.pet?"✓ Безопасно":"⚠ Опасно"} для кошек и собак</p><p>${E(p.pn)}</p></div>
-   <div class="blk"><h4>Чаще всего страдает от</h4>${p.pests.map(x=>`<button class="pest" data-pest="${x}">${E((PESTS.concat(DIS).find(y=>y.id===x)||{}).n||x)}</button>`).join("")}</div>
-   </div>
-   <div class="blk" style="margin-top:12px"><h4>Частые проблемы</h4><ul class="plain">${p.iss.map(i=>`<li><b>${E(i[0])}:</b> ${E(i[1])}</li>`).join("")}</ul></div>
-   <div class="tip"><b>Совет.</b> ${E(p.tip)}</div>
-   <div class="btns" style="margin-top:18px"><button class="btn ${added?"sec":"pri"}" data-toggle="${p.id}">${added?"Убрать из моего сада":"Добавить в мой сад"}</button></div></div>`;
-  if(!dlg.open)dlg.showModal();dlg.scrollTop=0}
-
-/* ---------- роутинг ---------- */
-function route(){
-  const p=(location.hash||"#home").slice(1);
-  const page=["catalog","my","problems","seasons"].includes(p)?p:"home";
-  view.innerHTML={home:home,catalog:catalog,my:myView,problems:problems,seasons:seasons}[page]();
-  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.p===page));
-  if(page==="catalog")drawList();
-  const c=document.getElementById("navCnt");c.textContent=mine.length;c.hidden=!mine.length;
+/* ============ ROUTER ============ */
+const view={name:'splash',p:{}};
+function go(name,p={}){
+  clearTimers();view.name=name;view.p=p;
+  document.body.className=(S.age?'age-'+S.age:'')+(S.set.noMotion?' nomotion':'');
+  renderBar();
+  (R[name]||R.splash)(p);
+  app.firstElementChild&&app.firstElementChild.scrollTo&&app.firstElementChild.scrollTo(0,0);
 }
-addEventListener("hashchange",()=>{route();scrollTo(0,0)});
-
-document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-open],[data-close],[data-toggle],[data-pest],[data-light],[data-f],[data-reset],[data-water],[data-del],[data-sym]");
-  if(!t)return;
-  const d=t.dataset;
-  if(d.open!==undefined){e.preventDefault();openPlant(d.open)}
-  else if(d.close!==undefined)dlg.close();
-  else if(d.toggle){
-    if(inMine(d.toggle))mine=mine.filter(m=>m.id!==d.toggle);else mine.push({id:d.toggle,last:today()});
-    save();openPlant(d.toggle);const pg=location.hash;route();}
-  else if(d.pest){dlg.close();location.hash="#problems";setTimeout(()=>{const el=document.getElementById("pc-"+d.pest);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("hl")}},60)}
-  else if(d.light!==undefined){F.light=d.light===""?null:+d.light;route()}
-  else if(d.f){F[d.f]=!F[d.f];route()}
-  else if(d.reset!==undefined){F.q="";F.light=null;F.easy=F.pet=false;route()}
-  else if(d.water){mineOf(d.water).last=today();save();route()}
-  else if(d.del){mine=mine.filter(m=>m.id!==d.del);save();route()}
-  else if(d.sym){
-    document.querySelectorAll(".sym button").forEach(b=>b.setAttribute("aria-pressed",b===t));
-    const s=SYM.find(x=>x.id===d.sym);
-    document.getElementById("causes").innerHTML=`<div class="causes"><h3 style="margin:14px 0 4px">${E(s.n)}: возможные причины</h3>${s.c.map((c,i)=>`<div class="cause"><b class="n">${i+1}</b><b>${E(c[0])}</b><p><em>Как понять:</em> ${E(c[1])}</p><p><em>Что делать:</em> ${E(c[2])}</p></div>`).join("")}</div>`}
+function renderBar(){
+  const hide=['splash','age','avatar','lock'].includes(view.name)||!S.age;
+  bar.className=hide?'hidden':'';
+  if(hide){bar.innerHTML='';return}
+  const back={world:null,island:'world',lesson:'island',game:'island',song:'island',rewards:'world',parents:'world'}[view.name];
+  bar.innerHTML=`
+    ${back?`<button class="btn round small yellow" data-go="${back}" ${view.name==='lesson'||view.name==='game'||view.name==='song'?`data-p='${JSON.stringify({id:view.p.id})}'`:''} aria-label="Назад">⬅️</button>`:''}
+    <button class="btn round small mint" data-go="world" aria-label="Карта мира">🏠</button>
+    <div class="spacer"></div>
+    <div class="chip" aria-label="Звёзды">⭐ ${totalStars()}</div>
+    <button class="btn round small purple" data-go="rewards" aria-label="Награды">🏆</button>
+    <button class="btn round small coral" data-go="lock" aria-label="Для родителей">⚙️</button>`;
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){sfx.tap();let p={};try{p=g.dataset.p?JSON.parse(g.dataset.p):{}}catch(_){}go(g.dataset.go,p)}
 });
-document.addEventListener("input",e=>{if(e.target.id==="q"){F.q=e.target.value;drawList()}});
-document.addEventListener("change",e=>{const id=e.target.dataset.date;if(id&&e.target.value){mineOf(id).last=e.target.value;save();route()}});
-dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
-dlg.addEventListener("close",()=>{if(location.hash==="#catalog")drawList()});
-route();
+
+/* ============ SCREENS ============ */
+const R={};
+const mascot=(sz=140)=>`<span class="mascot" style="font-size:${sz}px">${S.avatar}</span>`;
+
+R.splash=()=>{
+  app.innerHTML=`<div class="screen center">
+    <div class="bounce">${mascot(150)}</div>
+    <h1 style="color:var(--blue-d);text-shadow:0 5px 0 #fff">English<span style="color:var(--coral)">Land</span></h1>
+    <div class="sub" style="margin-bottom:22px">Учим английский играя! 🌈</div>
+    <button class="btn yellow" id="start" style="font-size:1.6em;padding:14px 44px">▶ Hello!</button>
+  </div>`;
+  $('#start').onclick=()=>{ctx();musicOn();say('Hello!');sfx.ok();go(S.age?'world':'age')};
+};
+
+R.age=()=>{
+  S.age=S.age; // keep
+  const cards=Object.entries(AGES).map(([k,a])=>`
+    <button class="card age-card" data-age="${k}" aria-label="${a.name} ${a.range} лет">
+      <div class="em">${a.emoji}</div><div class="nm">${a.name}</div><div class="rg">${a.range} лет</div>
+    </button>`).join('');
+  app.innerHTML=`<div class="screen center">
+    <div class="bubble" style="margin-bottom:6px">Сколько тебе лет? 🎂</div>
+    ${mascot(100)}
+    <div class="row" style="margin-top:14px">${cards}</div></div>`;
+  say('How old are you?');
+  app.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>{
+    S.age=b.dataset.age;save();sfx.ok();say(AGES[S.age].name);
+    go(S.avatar&&S.avatarChosen?'world':'avatar');
+  });
+};
+
+R.avatar=()=>{
+  document.body.className='age-'+S.age;
+  const opts=['🦊','🐲','🐼','🦁'];
+  app.innerHTML=`<div class="screen center">
+    <div class="bubble">Выбери друга! 💛</div>
+    <div class="row" style="margin-top:16px">${opts.map(o=>`<button class="card age-card" style="width:150px" data-av="${o}"><div class="em">${o}</div></button>`).join('')}</div></div>`;
+  say('Choose your friend!');
+  app.querySelectorAll('[data-av]').forEach(b=>b.onclick=()=>{
+    S.avatar=b.dataset.av;S.avatarChosen=true;save();sfx.ok();confetti(24);say('Nice to meet you!');later(()=>go('world'),900);
+  });
+};
+
+R.world=()=>{
+  const rec=ISLANDS.findIndex((i,idx)=>unlocked(idx)&&!(myStars()[i.id+':lesson']));
+  const isl=ISLANDS.map((i,idx)=>{
+    const ok=unlocked(idx),st=islandStars(i);
+    return `<button class="island ${ok?'':'sleep'} ${idx===rec?'rec':''}" data-isl="${i.id}" ${ok?'':'aria-disabled="true"'} aria-label="${i.title}">
+      <div class="land">
+        <span class="deco" style="left:10%;top:6%">${i.deco[0]}</span><span class="deco" style="right:10%;top:12%">${i.deco[1]}</span>
+        <span class="ic">${i.ic}</span>${ok?'':'<span class="zzz">💤</span>'}
+      </div>
+      <div class="lbl">${showText()?i.title:i.ic}</div>
+      <div class="stars">${ok?(st?'⭐'.repeat(Math.min(st,5))+(st>5?'+':''):'<span style="opacity:.35">☆☆☆</span>'):'🔒'}</div>
+    </button>`}).join('');
+  const soon=SOON.map(s=>`<div class="island sleep" aria-hidden="true"><div class="land"><span class="ic">${s.ic}</span><span class="zzz">💤</span></div><div class="lbl">${showText()?s.t:'?'}</div><div class="stars" style="font-size:.7em">скоро</div></div>`).join('');
+  app.innerHTML=`<div class="screen">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+      <div class="bounce">${mascot(90)}</div>
+      <div class="bubble">${showText()?'Choose an island! 🏝️':'Выбери остров! 🏝️'}</div>
+    </div>
+    <div class="world">${isl}${soon}</div></div>`;
+  app.querySelectorAll('[data-isl]').forEach(b=>b.onclick=()=>{
+    const idx=ISLANDS.findIndex(i=>i.id===b.dataset.isl);
+    if(!unlocked(idx)){sfx.try();toast('😴 Остров спит. Пройди урок на предыдущем!');return}
+    sfx.ok();go('island',{id:b.dataset.isl});
+  });
+  if(!view.p.silent)say(rec>=0?'Let us start!':'Welcome back!');
+};
+
+R.island=({id})=>{
+  const isl=ISLANDS.find(i=>i.id===id);
+  const acts=ACTS.filter(a=>!(a.id==='build'&&S.age==='cubs')).map(a=>{
+    const n=myStars()[id+':'+a.id]||0;
+    return `<button class="card act" data-act="${a.id}">
+      <div class="ai bounce" style="animation-delay:-${Math.random()*1.4}s">${a.ic}</div>
+      <div>${S.age==='cubs'?'':(a.t)}</div>
+      <div class="st">${a.id==='song'?'':(n?'⭐'.repeat(n):'<span style="opacity:.3">☆☆☆</span>')}</div>
+    </button>`}).join('');
+  app.innerHTML=`<div class="screen">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+      <span class="mascot" style="font-size:90px">${isl.guide}</span>
+      <div class="bubble">${showText()?isl.title+' — '+isl.ru:isl.ic}</div>
+    </div>
+    <div class="acts">${acts}</div></div>`;
+  say(isl.title.replace('&','and'));
+  app.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{
+    sfx.ok();const a=b.dataset.act;
+    if(a==='lesson')go('lesson',{id});else if(a==='song')go('song',{id});else go('game',{id,g:a});
+  });
+};
+
+/* ---- LESSON ---- */
+function wordHtml(w){return `<b>${w[0]}</b>${w.slice(1)}`}
+function lessonWords(isl){return isl.words.slice(0,S.age==='cubs'?5:(S.age==='explorers'?6:8))}
+R.lesson=({id})=>{
+  const isl=ISLANDS.find(i=>i.id===id);const ws=lessonWords(isl);let i=0;
+  const step=()=>{
+    const w=ws[i];
+    app.innerHTML=`<div class="screen center">
+      <div style="display:flex;align-items:center;gap:10px"><span class="mascot" style="font-size:70px">${isl.guide}</span><div class="bubble">${showText()?'Say it with me!':'🔊'}</div></div>
+      <div class="dots">${ws.map((_,k)=>`<div class="dot ${k<i?'done':k===i?'on':''}"></div>`).join('')}</div>
+      <div class="big-emoji" id="be" role="button" tabindex="0" aria-label="${w.w}">${w.e}</div>
+      ${showText()?`<div class="word-show" id="ws">${wordHtml(w.w)}</div>`:''}
+      ${S.age==='heroes'?`<div class="bubble" style="margin-top:8px">${w.s}</div>`:''}
+      <div class="ru">${S.set.translate&&S.age==='explorers'?w.ru:''}</div>
+      <div style="display:flex;gap:16px;margin-top:14px">
+        <button class="btn mint round" id="snd" aria-label="Повторить">🔊</button>
+        <button class="btn yellow" id="nx">${i<ws.length-1?'Дальше ➡️':'Проверка ✅'}</button>
+      </div></div>`;
+    const speak=()=>{say(w.w);const b=$('#be');b.animate([{transform:'scale(1)'},{transform:'scale(1.25) rotate(-6deg)'},{transform:'scale(1)'}],{duration:450,easing:'cubic-bezier(.3,2,.5,1)'})};
+    $('#be').onclick=speak;$('#snd').onclick=()=>{sfx.tap();speak()};
+    const wsEl=$('#ws');if(wsEl)wsEl.onclick=speak;
+    $('#be').onkeydown=e=>{if(e.key==='Enter'||e.key===' ')speak()};
+    later(()=>say(w.w).then(()=>S.age==='heroes'?say(w.s,{queue:true}):0),250);
+    $('#nx').onclick=()=>{sfx.ok();i++;i<ws.length?step():quiz()};
+  };
+  const quiz=()=>{
+    const qs=pick(ws,Math.min(S.age==='cubs'?3:5,ws.length));let qi=0,miss=0;
+    const ask=()=>{
+      const q=qs[qi];const opts=shuffle([q,...pick(ws.filter(x=>x!==q),S.age==='cubs'?2:3)]);
+      app.innerHTML=`<div class="screen center">
+        <div class="bubble">${showText()?'Where is…':'🔊'}</div>
+        <div class="dots">${qs.map((_,k)=>`<div class="dot ${k<qi?'done':k===qi?'on':''}"></div>`).join('')}</div>
+        ${showText()?`<div class="word-show">${wordHtml(q.w)}?</div>`:''}
+        <button class="btn mint round" id="snd">🔊</button>
+        <div class="quiz-grid" style="grid-template-columns:repeat(${opts.length>3?2:opts.length},1fr)">${opts.map(o=>`<button class="opt" data-w="${o.w}" aria-label="${o.w}">${o.e}</button>`).join('')}</div></div>`;
+      $('#snd').onclick=()=>say(q.w);later(()=>say(q.w),250);
+      app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+        if(b.dataset.w===q.w){
+          b.classList.add('ok');sfx.ok();confetti(14);say('Great!');qi++;
+          later(()=>qi<qs.length?ask():finish(),900);
+        }else{b.classList.add('try');miss++;sfx.try();toast(showText()?'Try again! 💪':'💪');say('Try again');later(()=>b.classList.remove('try'),600)}
+      });
+    };
+    ask();
+    const finish=()=>result(id+':lesson',miss===0?3:miss<=2?2:1,{id});
+  };
+  step();
+};
+
+/* ---- RESULT ---- */
+function result(key,stars,back){
+  const m=myStars();m[key]=Math.max(m[key]||0,stars);save();
+  const before=Math.floor;const tot=totalStars();
+  const newSt=STICKER_AT.findIndex(n=>n===tot||(n<=tot&&n>tot-stars));
+  confetti(60);sfx.win();say(stars===3?'Fantastic!':'Well done!');renderBar();
+  const isl=ISLANDS.find(i=>i.id===back.id);
+  const nxtIdx=ISLANDS.findIndex(i=>i.id===back.id)+1;
+  const opened=key.endsWith(':lesson')&&nxtIdx<ISLANDS.length&&(m[ISLANDS[nxtIdx-1].id+':lesson']>0)&&stars>0&&nxtIdx>=1&&!(S._sh&&S._sh[ISLANDS[nxtIdx].id]);
+  app.innerHTML=`<div class="screen center">
+    <div class="bounce">${mascot(130)}</div>
+    <h1>${showText()?'Great job!':'🎉'}</h1>
+    <div class="stars-big">${[1,2,3].map(n=>`<span style="animation-delay:${n*.25}s;${n>stars?'opacity:.25;filter:grayscale(1)':''}">⭐</span>`).join('')}</div>
+    ${newSt>=0?`<div class="bubble" style="margin-top:12px">Новый стикер! ${STICKERS[newSt]}</div>`:''}
+    ${opened?`<div class="bubble" style="margin-top:12px">🏝️ Открылся новый остров!</div>`:''}
+    <div style="display:flex;gap:16px;margin-top:22px;flex-wrap:wrap;justify-content:center">
+      <button class="btn mint" data-go="island" data-p='${JSON.stringify({id:isl.id})}'>🔁 ${showText()?'Ещё':''}</button>
+      <button class="btn yellow" data-go="world">🗺️ ${showText()?'На карту':''}</button>
+    </div></div>`;
+}
+
+/* ---- GAMES ---- */
+R.game=({id,g})=>{
+  const isl=ISLANDS.find(i=>i.id===id);
+  ({memory:gMemory,balloon:gBalloon,listen:gListen,build:gBuild})[g](isl,id);
+};
+
+function gMemory(isl,id){
+  const pairs={cubs:4,explorers:5,heroes:6}[S.age];
+  const ws=pick(isl.words,pairs);
+  const cards=shuffle(ws.flatMap(w=>[{w,kind:'e'},{w,kind:S.age==='cubs'?'e':'t'}]));
+  const cols=cards.length<=8?4:(cards.length<=10?5:4);
+  app.innerHTML=`<div class="screen">
+    <div class="bubble">${showText()?'Find the pairs! 🃏':'🃏'}</div>
+    <div class="mem" style="grid-template-columns:repeat(${cols},1fr)">
+    ${cards.map((c,i)=>`<button class="mcard" data-i="${i}" aria-label="карточка"><div class="in"><div class="b">❓</div><div class="f ${c.kind==='t'?'w':''}">${c.kind==='e'?c.w.e:c.w.w}</div></div></button>`).join('')}
+    </div></div>`;
+  let open=[],moves=0,found=0,lock=false;
+  app.querySelectorAll('.mcard').forEach(el=>el.onclick=async()=>{
+    if(lock||el.classList.contains('flip')||el.classList.contains('done'))return;
+    const c=cards[el.dataset.i];el.classList.add('flip');sfx.flip();say(c.w.w);open.push({el,c});
+    if(open.length===2){
+      moves++;lock=true;const[a,b]=open;open=[];
+      if(a.c.w===b.c.w){
+        await sleep(500);a.el.classList.replace('flip','done');b.el.classList.replace('flip','done');sfx.ok();confetti(10);found++;lock=false;
+        if(found===pairs){await sleep(700);result(id+':memory',moves<=pairs+2?3:moves<=pairs*2?2:1,{id})}
+      }else{await sleep(900);a.el.classList.remove('flip');b.el.classList.remove('flip');lock=false}
+    }
+  });
+}
+
+function gBalloon(isl,id){
+  const rounds=5;let r=0,miss=0;
+  const round=()=>{
+    const ws=isl.words,t=ws[(Math.random()*ws.length)|0];
+    const opts=shuffle([t,...pick(ws.filter(x=>x!==t),S.age==='cubs'?3:4)]);
+    const words=S.age==='heroes';
+    app.innerHTML=`<div class="screen">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center">
+        <div class="bubble">${showText()?'Pop the <b>'+t.w+'</b>! 🎈':'🎈 🔊'}</div>
+        <button class="btn mint round small" id="snd">🔊</button></div>
+      <div class="dots">${Array.from({length:rounds},(_,k)=>`<div class="dot ${k<r?'done':k===r?'on':''}"></div>`).join('')}</div>
+      <div class="sea" id="sea"></div></div>`;
+    const sea=$('#sea');
+    opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='balloon'+(words?' wordb':'');
+      b.style.left=(4+i*(88/opts.length)+Math.random()*4)+'%';
+      b.style.background=`radial-gradient(circle at 35% 30%,#fff8,${BALLOON_COLORS[i%6]} 55%)`;b.style.backgroundColor=BALLOON_COLORS[i%6];
+      b.style.animationDuration=(7+Math.random()*4)+'s';b.style.animationDelay=(-Math.random()*6)+'s';
+      b.innerHTML=words?o.w:(S.age==='explorers'?`${o.e}<span>${o.w}</span>`:o.e);b.setAttribute('aria-label',o.w);
+      b.onclick=()=>{
+        if(o===t){
+          b.classList.add('pop');sfx.pop();confetti(16);say('Well done!');r++;
+          later(()=>r<rounds?round():result(id+':balloon',miss===0?3:miss<=2?2:1,{id}),800);
+          sea.querySelectorAll('.balloon').forEach(x=>x.style.pointerEvents='none');
+        }else{b.animate([{transform:'translateX(-10px)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}],{duration:300});miss++;sfx.try();toast(showText()?'Try again! 💪':'💪');say('Try again')}
+      };
+      sea.appendChild(b);
+    });
+    $('#snd').onclick=()=>say(t.w);later(()=>say(t.w),300);
+  };
+  round();
+}
+
+function gListen(isl,id){
+  const rounds=5;let r=0,miss=0;const used=[];
+  const round=()=>{
+    const ws=isl.words;const pool=ws.filter(w=>!used.includes(w));
+    const t=(pool.length?pool:ws)[(Math.random()*(pool.length||ws.length))|0];used.push(t);
+    const opts=shuffle([t,...pick(ws.filter(x=>x!==t),S.age==='cubs'?2:3)]);
+    app.innerHTML=`<div class="screen center">
+      <div class="bubble">${showText()?'Listen and choose! 👂':'👂'}</div>
+      <div class="dots">${Array.from({length:rounds},(_,k)=>`<div class="dot ${k<r?'done':k===r?'on':''}"></div>`).join('')}</div>
+      <button class="btn mint round bounce" id="snd" style="width:calc(var(--tap)*1.6);height:calc(var(--tap)*1.6);font-size:2.4em">🔊</button>
+      <div class="quiz-grid" style="grid-template-columns:repeat(${opts.length>3?2:opts.length},1fr)">
+      ${opts.map(o=>`<button class="opt" data-w="${o.w}" aria-label="вариант">${o.e}${S.age==='heroes'?`<small>${o.w}</small>`:''}</button>`).join('')}</div></div>`;
+    $('#snd').onclick=()=>say(t.w);later(()=>say(t.w),300);
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      if(b.dataset.w===t.w){
+        b.classList.add('ok');sfx.ok();confetti(14);say('Great!');r++;
+        later(()=>r<rounds?round():result(id+':listen',miss===0?3:miss<=2?2:1,{id}),900);
+        app.querySelectorAll('.opt').forEach(x=>x.style.pointerEvents='none');
+      }else{b.classList.add('try');miss++;sfx.try();toast(showText()?'Try again! 💪':'💪');later(()=>b.classList.remove('try'),600)}
+    });
+  };
+  round();
+}
+
+function gBuild(isl,id){
+  const maxLen=S.age==='explorers'?5:8;
+  const pool=isl.words.filter(w=>w.w.length<=maxLen);
+  const list=pick(pool.length>=4?pool:isl.words,4);let r=0,miss=0;
+  const round=()=>{
+    const t=list[r],letters=t.w.split('');let pos=0;
+    let tiles=shuffle(letters.map((l,i)=>({l,i})));
+    if(letters.length>1&&tiles.every((x,k)=>x.l===letters[k]))tiles=tiles.reverse();
+    app.innerHTML=`<div class="screen center">
+      <div class="bubble">${showText()?'Build the word! 🔤':'🔤'}</div>
+      <div class="dots">${list.map((_,k)=>`<div class="dot ${k<r?'done':k===r?'on':''}"></div>`).join('')}</div>
+      <div class="big-emoji" id="be" style="font-size:clamp(70px,16vw,130px)">${t.e}</div>
+      <div class="slots">${letters.map(()=>`<div class="slot"></div>`).join('')}</div>
+      <div class="tiles">${tiles.map(x=>`<button class="tile" data-i="${x.i}" aria-label="буква">${x.l}</button>`).join('')}</div></div>`;
+    $('#be').onclick=()=>say(t.w);later(()=>say(t.w),300);
+    const slots=app.querySelectorAll('.slot');
+    app.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{
+      const l=letters[b.dataset.i];
+      if(l===letters[pos]){
+        sfx.tap();slots[pos].textContent=l;slots[pos].classList.add('fill');b.classList.add('used');pos++;
+        const nx=[...app.querySelectorAll('.tile:not(.used)')].find(x=>letters[x.dataset.i]===letters[pos]);
+        if(pos===letters.length){
+          sfx.ok();confetti(24);say(t.w);r++;
+          later(()=>r<list.length?round():result(id+':build',miss===0?3:miss<=2?2:1,{id}),1100);
+        }
+      }else{b.classList.add('try');miss++;sfx.try();later(()=>b.classList.remove('try'),500)}
+    });
+  };
+  round();
+}
+
+/* ---- SONG / KARAOKE ---- */
+let karaokeStop=false;
+R.song=({id})=>{
+  const isl=ISLANDS.find(i=>i.id===id);
+  app.innerHTML=`<div class="screen center karaoke">
+    <div class="bounce" id="mk">${mascot(90)}</div>
+    <div class="bubble">${showText()?'Karaoke! 🎤':'🎤'}</div>
+    <div id="lines" style="margin:14px 0">${isl.song.map((l,i)=>`<div class="line" id="l${i}">${l.split(' ').map(w=>`<span class="w">${showText()?w:'♪'}</span>`).join('')}</div>`).join('')}</div>
+    <button class="btn coral" id="play" style="font-size:1.2em">▶ Play</button></div>`;
+  $('#play').onclick=async()=>{
+    karaokeStop=false;const btn=$('#play');btn.disabled=true;btn.style.opacity=.6;
+    for(let i=0;i<isl.song.length&&!karaokeStop;i++){
+      document.querySelectorAll('.line').forEach(l=>l.classList.remove('now'));
+      const L=$('#l'+i);if(!L)return;L.classList.add('now');
+      const ws=L.querySelectorAll('.w');
+      const sp=say(isl.song[i],{rate:.75});
+      for(let k=0;k<ws.length&&!karaokeStop;k++){ws.forEach(w=>w.classList.remove('hl'));ws[k].classList.add('hl');sfx.tap();await sleep(520)}
+      await sp;ws.forEach(w=>w.classList.remove('hl'));
+    }
+    if(karaokeStop)return;
+    btn.disabled=false;btn.style.opacity=1;btn.textContent='🔁 Again';confetti(30);sfx.win();
+    const m=myStars();m[id+':song']=3;save();renderBar();
+  };
+};
+
+/* ---- REWARDS ---- */
+R.rewards=()=>{
+  const tot=totalStars();
+  const stage=tot>=20?3:tot>=10?2:tot>=3?1:0;
+  const petEm=['🥚','🐣',S.avatar,S.avatar][stage];
+  const sizes=[90,100,110,150][stage];
+  const next=[3,10,20,Infinity][stage];const prev=[0,3,10,20][stage];
+  const pct=stage===3?100:((tot-prev)/(next-prev)*100);
+  const names=['Яйцо','Малыш','Подросток','Король острова'];
+  app.innerHTML=`<div class="screen">
+    <div class="pet-box">
+      <div style="position:relative">${stage===3?'<div style="position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:60px">👑</div>':''}<span class="mascot" style="font-size:${sizes}px">${petEm}</span></div>
+      <div class="bubble">${showText()?names[stage]+' · ⭐ '+tot:'⭐ '+tot}</div>
+      <div class="pbar"><i style="width:${pct}%"></i></div>
+      <div class="sub" style="font-size:.7em">${stage===3?'Максимальный уровень!':'До следующей стадии: '+(next-tot)+' ⭐'}</div>
+    </div>
+    <h2 style="margin-top:20px">Стикеры</h2>
+    <div class="stickers">${STICKERS.map((s,i)=>`<div class="sticker ${tot>=STICKER_AT[i]?'':'lock'}" onclick="${tot>=STICKER_AT[i]?`sfx.pop();confetti(8)`:`toast('Нужно ⭐ ${STICKER_AT[i]}')`}">${tot>=STICKER_AT[i]?s:'🔒'}<small>${tot>=STICKER_AT[i]?'':'⭐'+STICKER_AT[i]}</small></div>`).join('')}</div></div>`;
+};
+
+/* ---- PARENTS ---- */
+R.lock=()=>{
+  const a=3+(Math.random()*7|0),b=6+(Math.random()*4|0);
+  app.innerHTML=`<div class="screen center">
+    <div class="panel" style="text-align:center;max-width:420px">
+      <div style="font-size:60px">🔐</div><h2>Для родителей</h2>
+      <p>Чтобы войти, решите пример:</p>
+      <div style="font-size:42px;font-weight:700;margin:10px 0">${a} × ${b} = ?</div>
+      <input class="lock-in" id="ans" type="number" inputmode="numeric" autocomplete="off">
+      <div style="display:flex;gap:14px;justify-content:center;margin-top:20px">
+        <button class="btn yellow small" data-go="world">Назад</button>
+        <button class="btn mint small" id="okb">Войти</button></div>
+      <div id="err" class="sub" style="color:var(--coral-d);min-height:1.4em;margin-top:10px"></div>
+    </div></div>`;
+  const chk=()=>{if(+$('#ans').value===a*b){sfx.ok();go('parents')}else{sfx.try();$('#err').textContent='Неверно, попробуйте ещё раз'}};
+  $('#okb').onclick=chk;$('#ans').onkeydown=e=>{if(e.key==='Enter')chk()};setTimeout(()=>$('#ans')&&$('#ans').focus(),100);
+};
+
+let restTimer=null;
+function setRest(min){
+  clearTimeout(restTimer);S.set.rest=min;save();
+  if(min>0)restTimer=setTimeout(()=>{$('#rest').classList.add('show');clearTimers()},min*60000);
+}
+$('#restBtn').onclick=()=>{$('#rest').classList.remove('show');setRest(S.set.rest);go('world',{silent:1})};
+
+R.parents=()=>{
+  const sl=(id,label,val)=>`<label>${label}<input type="range" id="${id}" min="0" max="100" value="${val}"></label>`;
+  app.innerHTML=`<div class="screen">
+    <h2>👨‍👩‍👧 Для родителей</h2>
+    <div class="panel"><h3>О методике</h3>
+      <p>EnglishLand учит английскому через игру: <b>показ → повторение → проверка → награда</b>. Занятия по 5–15 минут, озвучка всех слов на британском английском (голос берётся из вашего браузера), мягкая обратная связь без «проигрышей».</p>
+      <p><span class="tag">3 острова</span><span class="tag">8 слов на остров</span><span class="tag">4 игры</span><span class="tag">караоке</span></p>
+      <p>Темы MVP: <b>Hello &amp; Me</b>, <b>Animals</b>, <b>Colours &amp; Shapes</b>.</p></div>
+    <div class="panel"><h3>Звук</h3>
+      ${sl('vVoice','🗣️ Озвучка',S.set.voice)}${sl('vSfx','🔔 Эффекты',S.set.sfx)}${sl('vMus','🎵 Музыка',S.set.musicVol)}
+      <label><input type="checkbox" class="switch" id="mus" ${S.set.music?'checked':''}> Фоновая музыка</label></div>
+    <div class="panel"><h3>Обучение</h3>
+      <label><input type="checkbox" class="switch" id="tr" ${S.set.translate?'checked':''}> Показывать русский перевод слова (группа Explorers)</label>
+      <label><input type="checkbox" class="switch" id="nm" ${S.set.noMotion?'checked':''}> Меньше анимаций</label>
+      <label>⏰ Напоминание об отдыхе:
+        <select id="rest">${[0,15,20,30].map(m=>`<option value="${m}" ${S.set.rest===m?'selected':''}>${m?m+' минут':'выключено'}</option>`).join('')}</select></label>
+      <label>🎂 Возрастная группа:
+        <select id="age">${Object.entries(AGES).map(([k,a])=>`<option value="${k}" ${S.age===k?'selected':''}>${a.name} (${a.range})</option>`).join('')}</select></label></div>
+    <div class="panel"><h3>Прогресс</h3>
+      <p>Прогресс хранится <b>только на этом устройстве</b> (localStorage). При очистке данных браузера он будет потерян.</p>
+      <p>Всего звёзд: <b>⭐ ${totalStars()}</b></p>
+      <button class="btn coral small" id="reset">🗑️ Сбросить прогресс</button></div>
+    <div class="panel"><h3>🔒 Конфиденциальность</h3>
+      <ul><li>Нет регистрации, аккаунтов, логинов и паролей.</li><li>Персональные данные не собираются и никуда не передаются.</li><li>Нет рекламы, покупок, чатов и внешних ссылок.</li><li>Нет сторонних трекеров и cookies.</li><li>В прототипе нет аналитики и обращений к серверу: всё работает локально.</li></ul></div>
+    <button class="btn yellow" data-go="world" style="margin:20px 0">⬅️ На карту</button></div>`;
+  $('#vVoice').oninput=e=>{S.set.voice=+e.target.value;save()};$('#vVoice').onchange=()=>say('Hello!');
+  $('#vSfx').oninput=e=>{S.set.sfx=+e.target.value;save()};$('#vSfx').onchange=()=>sfx.ok();
+  $('#vMus').oninput=e=>{S.set.musicVol=+e.target.value;save();musicOn()};
+  $('#mus').onchange=e=>{S.set.music=e.target.checked;save();musicOn()};
+  $('#tr').onchange=e=>{S.set.translate=e.target.checked;save()};
+  $('#nm').onchange=e=>{S.set.noMotion=e.target.checked;save();document.body.classList.toggle('nomotion',S.set.noMotion)};
+  $('#rest').onchange=e=>{setRest(+e.target.value);toast(+e.target.value?'⏰ Таймер включён':'Таймер выключен')};
+  $('#age').onchange=e=>{S.age=e.target.value;save();document.body.className='age-'+S.age+(S.set.noMotion?' nomotion':'');toast('Группа изменена');renderBar()};
+  $('#reset').onclick=()=>{if(confirm('Сбросить весь прогресс? Это нельзя отменить.')){S.stars={};S.age=null;S.avatarChosen=false;save();go('splash')}};
+};
+
+/* ============ START ============ */
+if(S.set.rest>0)setRest(S.set.rest);
+go('splash');
 </script>
 </body>
 </html>
