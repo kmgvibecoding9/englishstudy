@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мой сад дома</title>
+<meta name="description" content="Справочник по уходу за домашними растениями: полив, свет, температура, проблемы и сезоны.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ea;--surface:#fffefa;--ink:#1f2a22;--muted:#5d6b61;--line:#dcd9c9;
+  --green:#2f7d4f;--green-d:#1f5c38;--green-l:#dcefe0;
+  --sun:#d99a0b;--sun-l:#faedc4;--water:#2b79b8;--water-l:#d8e9f6;--warn:#c4476a;--warn-l:#f8dde5;
+  --shadow:0 1px 2px rgba(31,42,34,.08),0 6px 18px rgba(31,42,34,.06);
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141a16;--surface:#1d2520;--ink:#e8efe9;--muted:#9bab9f;--line:#33403a;
+    --green:#5cbf84;--green-d:#8fdcac;--green-l:#22392b;
+    --sun:#f0b840;--sun-l:#3b3217;--water:#6cb4ea;--water-l:#1c3042;--warn:#ee82a1;--warn-l:#3f212b;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Golos Text",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:Unbounded,"Golos Text",sans-serif;line-height:1.2;margin:0}
+h2{font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.4rem}
+h3{font-size:1.05rem}
+p{margin:.3rem 0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0}
+.logo{font:700 1.05rem Unbounded,sans-serif;color:var(--green-d);text-decoration:none;display:flex;gap:8px;align-items:center;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{padding:7px 14px;border-radius:99px;text-decoration:none;color:var(--ink);font-weight:500;font-size:.95rem}
+nav a:hover{background:var(--green-l)}
+nav a.on{background:var(--green);color:#fff}
+nav .cnt{background:var(--sun);color:#1f2a22;border-radius:99px;font-size:.75rem;padding:0 7px;margin-left:4px;font-weight:600}
+
+/* hero */
+.hero{padding:44px 0 20px;display:grid;gap:28px;grid-template-columns:1.1fr 1fr;align-items:center}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);color:var(--green-d)}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:30em;margin:14px 0 22px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:99px;padding:11px 22px;font-weight:600;text-decoration:none;display:inline-block}
+.btn.pri{background:var(--green);color:#fff}
+.btn.pri:hover{background:var(--green-d)}
+.btn.sec{background:var(--surface);border:1.5px solid var(--green);color:var(--green-d)}
+.btn.sec:hover{background:var(--green-l)}
+.shelf{position:relative;padding-top:10px}
+.shelf .row{display:flex;align-items:flex-end;justify-content:space-around;gap:4px;border-bottom:10px solid #a9794b;padding:0 8px;border-radius:2px}
+.shelf button{background:none;border:0;padding:0;flex:1;max-width:120px;transform-origin:bottom;animation:grow .9s cubic-bezier(.2,.9,.3,1.2) both;transition:transform .2s}
+.shelf button:hover{transform:translateY(-6px) scale(1.04)}
+.shelf button:nth-child(2){animation-delay:.1s}.shelf button:nth-child(3){animation-delay:.2s}
+.shelf button:nth-child(4){animation-delay:.3s}.shelf button:nth-child(5){animation-delay:.4s}
+@keyframes grow{from{transform:scaleY(0);opacity:0}to{transform:none;opacity:1}}
+.shelf svg{width:100%;height:auto;display:block}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:8px}
+
+/* sections */
+section.page{padding:28px 0 56px}
+.sub{color:var(--muted);margin-bottom:18px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+input[type=search],input[type=date]{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 14px}
+input[type=search]{flex:1;min-width:220px}
+.chip{background:var(--surface);border:1.5px solid var(--line);border-radius:99px;padding:6px 14px;font-size:.9rem}
+.chip[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.count{color:var(--muted);font-size:.9rem;margin:6px 0 14px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:0;padding:0;text-align:left;display:flex;flex-direction:column;transition:transform .2s}
+button.card:hover{transform:translateY(-3px)}
+.card .pic{position:relative;aspect-ratio:5/3}
+.card .pic svg{width:100%;height:100%;display:block}
+.badge{position:absolute;top:10px;left:10px;background:var(--green);color:#fff;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:99px}
+.card .body{padding:12px 16px 16px}
+.card .lat{color:var(--muted);font-style:italic;font-size:.88rem}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:.8rem;padding:2px 10px;border-radius:99px;font-weight:500}
+.tag.w{background:var(--water-l);color:var(--water)}.tag.s{background:var(--sun-l);color:var(--sun)}.tag.t{background:var(--warn-l);color:var(--warn)}
+.empty{text-align:center;padding:40px 16px;background:var(--surface);border-radius:var(--r)}
+
+/* dialog */
+dialog{border:0;padding:0;border-radius:20px;width:min(760px,calc(100vw - 20px));max-height:92vh;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,20,14,.55)}
+.dhead{position:relative}
+.dhead svg{width:100%;height:210px;display:block}
+.dhead .x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface);font-size:1.3rem;box-shadow:var(--shadow)}
+.dbody{padding:18px 22px 24px}
+.dbody .ttl{margin-bottom:2px}
+.dgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:16px}
+.blk{background:var(--bg);border-radius:14px;padding:12px 14px}
+.blk h4{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.scale{display:flex;gap:4px;margin:6px 0}
+.scale i{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.scale i.on{background:var(--water)}
+.scale.light i.on{background:var(--sun)}
+.scale.hum i.on{background:var(--green)}
+.temp{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#6aa5d8,#7cc58e,#f0c050,#e5784f);margin:12px 0 4px}
+.temp b{position:absolute;top:-4px;height:18px;border:2.5px solid var(--ink);border-radius:9px;background:rgba(255,255,255,.35)}
+.tl{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+.pest{display:inline-block;margin:2px 4px 2px 0;border:1.5px solid var(--warn);background:var(--warn-l);color:var(--warn);border-radius:99px;padding:3px 12px;font-size:.88rem;font-weight:500}
+.pest:hover{background:var(--warn);color:#fff}
+ul.plain{margin:4px 0;padding-left:18px}
+.safe{color:var(--green-d);font-weight:600}.danger{color:var(--warn);font-weight:600}
+.tip{background:var(--sun-l);border-left:4px solid var(--sun);border-radius:10px;padding:10px 14px;margin-top:12px}
+
+/* my plants */
+.summary{background:var(--green-l);border-radius:var(--r);padding:14px 18px;margin:12px 0;font-weight:500}
+.my{display:grid;grid-template-columns:96px 1fr;gap:14px;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:12px;margin-bottom:12px;align-items:center}
+.my .th{border-radius:12px;overflow:hidden}.my .th svg{display:block;width:100%;height:auto}
+.my .st{font-weight:600}
+.st.late{color:var(--warn)}.st.today{color:var(--water)}.st.ok{color:var(--green-d)}
+.bar2{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0}
+.bar2 i{display:block;height:100%;background:var(--water);border-radius:4px}
+.bar2 i.late{background:var(--warn)}
+.row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.9rem}
+.row2 label{color:var(--muted)}
+.btn.sm{padding:6px 14px;font-size:.88rem}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.88rem}
+
+/* problems */
+.sym{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin:12px 0 18px}
+.sym button{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left;font-weight:500}
+.sym button[aria-pressed=true]{background:var(--warn);color:#fff;border-color:var(--warn)}
+.causes{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:6px 18px 12px;margin-bottom:24px}
+.cause{padding:12px 0;border-bottom:1px dashed var(--line)}.cause:last-child{border:0}
+.cause b.n{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--warn);color:#fff;text-align:center;font-size:.8rem;line-height:24px;margin-right:8px}
+.cause p{margin-left:32px}
+.cause em{font-style:normal;font-weight:600;color:var(--green-d)}
+.sec-t{margin:28px 0 12px}
+.pgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.pc{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 18px;scroll-margin-top:90px}
+.pc.hl{outline:3px solid var(--sun);animation:pulse 1.6s}
+@keyframes pulse{50%{background:var(--sun-l)}}
+.pc h3{margin-bottom:4px}
+.pc dt{font-weight:600;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:8px}
+.pc dd{margin:0}
+.note{background:var(--warn-l);border-radius:12px;padding:10px 14px;font-size:.92rem;margin:14px 0}
+.rules{counter-reset:r;list-style:none;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.rules li{counter-increment:r;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px}
+.rules li::before{content:counter(r);display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;margin-right:8px}
+
+/* seasons */
+.seasons{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.season{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;border-top:6px solid var(--c)}
+.season.now{outline:3px solid var(--c)}
+.season h3{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.season .now-t{font:600 .72rem "Golos Text";background:var(--c);color:#fff;border-radius:99px;padding:2px 10px}
+.season dl{margin:8px 0 0}.season dt{font-weight:600;margin-top:8px;font-size:.88rem;color:var(--muted)}.season dd{margin:0}
+
+footer{border-top:1px solid var(--line);padding:22px 0 36px;color:var(--muted);font-size:.88rem}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding-top:24px}
+  .my{grid-template-columns:72px 1fr}
+  .dhead svg{height:160px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap bar">
+  <a class="logo" href="#home" aria-label="Мой сад дома, на главную">
+    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29V14" stroke="#2f7d4f" stroke-width="2.5" stroke-linecap="round"/><path d="M16 15C8 15 5 9 5 4c7 0 11 4 11 11Z" fill="#5cbf84"/><path d="M16 19c6 0 10-3 11-9-6 0-11 3-11 9Z" fill="#2f7d4f"/></svg>
+    Мой сад дома</a>
+  <nav aria-label="Основная навигация">
+    <a href="#catalog" data-p="catalog">Каталог</a>
+    <a href="#my" data-p="my">Мои растения<span class="cnt" id="navCnt" hidden>0</span></a>
+    <a href="#problems" data-p="problems">Проблемы</a>
+    <a href="#seasons" data-p="seasons">Сезоны</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div id="view"></div>
+</main>
+
+<footer><div class="wrap">
+  Сроки полива и температуры даны как ориентир при комнатной температуре и средней освещённости. Информация составлена по общим рекомендациям и требует проверки специалистом; о токсичности для животных уточняйте у ветеринара. Данные «Моих растений» хранятся только в вашем браузере.
+</div></footer>
+
+<dialog id="dlg" aria-label="Карточка растения"></dialog>
+
+<script>
+"use strict";
+/* ---------- данные ---------- */
+const LIGHT=["Полутень","Рассеянный свет","Прямое солнце"];
+const HUM=["Низкая","Средняя","Высокая"];
+const DIFF=["Лёгкое","Среднее","Требовательное"];
+
+const P=[
+{id:"monstera",n:"Монстера",f:"Монстера деликатесная",l:"Monstera deliciosa",li:[0,1],w:3,sum:7,win:14,
+ wt:"Поливайте, когда верхние 3–4 см земли просохли. Раз в 2–3 недели протирайте листья.",
+ t:[18,27],tw:15,h:2,hn:"Любит опрыскивание и тёплый душ, держите подальше от батарей.",
+ feed:"Апрель–сентябрь раз в 2 недели комплексным удобрением для декоративнолиственных.",
+ rep:"Молодую — каждый год, взрослую — раз в 2–3 года; нужна опора.",pet:false,pn:"Содержит оксалаты, раздражает пасть и желудок кошек и собак.",
+ d:1,iss:[["Жёлтые листья","чаще всего перелив или плохой дренаж"],["Нет разрезов на листьях","мало света или молодой возраст"],["Коричневые кончики","сухой воздух"]],
+ tip:"Если воздушные корни мешают, не обрезайте: направьте их в землю или на опору.",pests:["spider","scale","thrips"],hue:150,shape:"broad"},
+{id:"benjamin",n:"Фикус Бенджамина",f:"Фикус",l:"Ficus benjamina",li:[1,2],w:3,sum:7,win:12,
+ wt:"Умеренно, давайте верхнему слою подсохнуть. Не переносит ни пересушки, ни застоя воды.",
+ t:[18,25],tw:15,h:2,hn:"Опрыскивайте зимой при работающем отоплении.",
+ feed:"Весной и летом раз в 2–3 недели.",rep:"Раз в 1–2 года весной; не любит частых перестановок.",
+ pet:false,pn:"Сок раздражает кожу и слизистые животных.",d:2,
+ iss:[["Опадают листья","сквозняк, переезд или смена света"],["Жёлтые листья","перелив"],["Липкий налёт","щитовка или червец"]],
+ tip:"Выберите постоянное место и не поворачивайте горшок: фикус остро реагирует на перемены.",pests:["scale","spider","mealy"],hue:120,shape:"tree"},
+{id:"elastica",n:"Фикус эластика",f:"Каучуконосный фикус",l:"Ficus elastica",li:[1,2],w:3,sum:7,win:14,
+ wt:"Когда верх земли просох на 3–4 см. Зимой воды меньше.",
+ t:[16,27],tw:12,h:1,hn:"Достаточно обычной влажности; протирайте крупные листья от пыли.",
+ feed:"Раз в месяц с апреля по сентябрь.",rep:"Раз в 2 года, горшок немного больше прежнего.",
+ pet:false,pn:"Сок раздражает; держите вне доступа питомцев.",d:1,
+ iss:[["Листья желтеют и опадают","перелив или холод"],["Нижние листья опали","нехватка света"],["Паутинка на листьях","паутинный клещ"]],
+ tip:"Прищипните верхушку, чтобы растение ветвилось, а не тянулось вверх.",pests:["spider","scale","mealy"],hue:95,shape:"broad"},
+{id:"spathi",n:"Спатифиллум",f:"Женское счастье",l:"Spathiphyllum",li:[0,1],w:4,sum:4,win:8,
+ wt:"Любит равномерную влажность: поливайте, как только верх земли слегка подсох. Листья поникли — сигнал просить воды.",
+ t:[18,27],tw:16,h:3,hn:"Нужен влажный воздух; регулярно опрыскивайте.",
+ feed:"Раз в 2 недели в период роста, особенно перед цветением.",rep:"Раз в год весной.",
+ pet:false,pn:"Опасен для кошек и собак: раздражает пасть и ЖКТ.",d:1,
+ iss:[["Не цветёт","мало света или слишком большой горшок"],["Коричневые кончики","сухой воздух или жёсткая вода"],["Вялые листья","нехватка воды или перелив"]],
+ tip:"Отстаивайте воду сутки: от жёсткой воды листья темнеют по краям.",pests:["spider","mealy","thrips"],hue:165,shape:"broad"},
+{id:"sansevieria",n:"Сансевиерия",f:"Щучий хвост, тёщин язык",l:"Sansevieria trifasciata",li:[0,2],w:1,sum:14,win:30,
+ wt:"Редко и немного. Лучше недолить, чем перелить; зимой почти не поливайте.",
+ t:[15,30],tw:10,h:1,hn:"Сухой воздух не проблема, опрыскивать не нужно.",
+ feed:"Раз в 1–2 месяца летом, суккулентным удобрением.",rep:"Раз в 3–4 года, когда корни распирают горшок.",
+ pet:false,pn:"Слабо токсична для кошек и собак.",d:0,
+ iss:[["Мягкие желтеющие листья","перелив, начало гнили"],["Листья изгибаются","мало света"],["Коричневые пятна","холодная вода или сквозняк"]],
+ tip:"Идеальное растение для тёмной комнаты и для тех, кто часто забывает про полив.",pests:["spider","mealy","rot"],hue:140,shape:"sword"},
+{id:"zz",n:"Замиокулькас",f:"Долларовое дерево",l:"Zamioculcas zamiifolia",li:[0,1],w:1,sum:14,win:28,
+ wt:"Клубни запасают воду. Поливайте только после полного просыхания земли.",
+ t:[16,28],tw:14,h:1,hn:"Сухой воздух переносит хорошо.",
+ feed:"Раз в месяц весной и летом, суккулентным удобрением.",rep:"Раз в 2–3 года, горшок лишь чуть больше.",
+ pet:false,pn:"Токсичен: раздражает кожу и ЖКТ.",d:0,
+ iss:[["Жёлтые стебли","перелив, самая частая причина"],["Чернеют основания","гниль клубней"],["Не растёт","мало света и подкормки"]],
+ tip:"Любит игнорирование: при сомнении подождите ещё неделю.",pests:["spider","mealy","rot"],hue:130,shape:"zz"},
+{id:"chlorophytum",n:"Хлорофитум",f:"Паучник",l:"Chlorophytum comosum",li:[0,2],w:3,sum:6,win:12,
+ wt:"Умеренно; утолщённые корни запасают воду и терпят пропуск полива.",
+ t:[12,27],tw:8,h:1,hn:"Неприхотлив; опрыскивание улучшает вид.",
+ feed:"Раз в 2–3 недели весной и летом.",rep:"Ежегодно, пока корни быстро растут.",
+ pet:true,pn:"Безопасен для кошек и собак.",d:0,
+ iss:[["Коричневые кончики","сухой воздух или соли в воде"],["Бледные листья","много прямого солнца"],["Нет детей","тесный горшок или мало света"]],
+ tip:"Укореняйте «деток» прямо в воде или земле, пока они на материнском побеге.",pests:["aphid","spider","gnat"],hue:110,shape:"tuft"},
+{id:"pothos",n:"Эпипремнум",f:"Золотой лотос, потос",l:"Epipremnum aureum",li:[0,1],w:2,sum:7,win:14,
+ wt:"Когда земля подсохла на 2–3 см. Выдерживает редкий полив.",
+ t:[15,29],tw:12,h:1,hn:"Подойдёт обычная влажность.",
+ feed:"Раз в 3–4 недели в сезон роста.",rep:"Раз в 1–2 года.",
+ pet:false,pn:"Токсичен для кошек и собак.",d:0,
+ iss:[["Жёлтые листья","перелив"],["Пёстрость пропадает","мало света"],["Вытянутые лозы","нехватка света"]],
+ tip:"Обрезайте длинные плети: так куст станет гуще, а черенки легко укореняются.",pests:["mealy","spider","gnat"],hue:105,shape:"vine"},
+{id:"aloe",n:"Алоэ вера",f:"Алоэ",l:"Aloe vera",li:[1,2],w:1,sum:14,win:30,
+ wt:"Поливайте обильно, но редко, и только когда земля полностью сухая. Вода не должна попадать в розетку.",
+ t:[15,28],tw:10,h:1,hn:"Сухой воздух ему подходит.",
+ feed:"Раз в 1–2 месяца летом суккулентным удобрением.",rep:"Раз в 2–3 года в широкий горшок с песком.",
+ pet:false,pn:"Токсично для кошек и собак.",d:0,
+ iss:[["Мягкие, водянистые листья","перелив"],["Вытянулось","мало света"],["Красноватые листья","слишком яркое солнце"]],
+ tip:"Зимой держите прохладно и светло, это помогает растению отдохнуть.",pests:["mealy","scale","rot"],hue:140,shape:"sword"},
+{id:"orchid",n:"Орхидея фаленопсис",f:"Орхидея",l:"Phalaenopsis",li:[1],w:2,sum:7,win:10,
+ wt:"Погружайте горшок в воду на 10–15 минут, когда корни посеребрились, а кора просохла. Не заливайте точку роста.",
+ t:[18,27],tw:15,h:2,hn:"Нужна влажность 50–60 %; хорош проветриваемый воздух.",
+ feed:"Специальное удобрение для орхидей раз в 2–3 недели во время роста.",rep:"Раз в 2 года после цветения, в кору.",
+ pet:true,pn:"Безопасна для кошек и собак.",d:2,
+ iss:[["Не цветёт","нет перепада температур или мало света"],["Вялые, сморщенные листья","корни повреждены или пересохли"],["Опадают бутоны","сквозняк, перемена места"]],
+ tip:"Прозрачный горшок поможет следить за состоянием корней.",pests:["mealy","scale","rot"],hue:320,shape:"orchid"},
+{id:"violet",n:"Фиалка",f:"Сенполия",l:"Saintpaulia",li:[1],w:3,sum:5,win:8,
+ wt:"Поливайте тёплой водой под корень или через поддон, не мочите листья.",
+ t:[18,24],tw:16,h:2,hn:"Не опрыскивайте, поставьте рядом открытую ёмкость с водой.",
+ feed:"Удобрение для фиалок раз в 2 недели.",rep:"Раз в год в небольшой горшок.",
+ pet:true,pn:"Безопасна для кошек и собак.",d:1,
+ iss:[["Не цветёт","мало света или большой горшок"],["Белый налёт","мучнистая роса"],["Пятна на листьях","холодная вода на листьях"]],
+ tip:"Раз в неделю поворачивайте горшок, чтобы розетка росла ровно.",pests:["mildew","thrips","mealy"],hue:285,shape:"rosette"},
+{id:"pelargonium",n:"Пеларгония",f:"Герань",l:"Pelargonium",li:[2],w:2,sum:5,win:14,
+ wt:"Умеренно, давайте земле просохнуть. Любит поддон, но не застой воды.",
+ t:[15,25],tw:8,h:1,hn:"Сухой воздух не страшен; листья не опрыскивать.",
+ feed:"Раз в 2 недели в период роста калийным удобрением.",rep:"Раз в 1–2 года весной.",
+ pet:false,pn:"Токсична для кошек и собак.",d:0,
+ iss:[["Не цветёт","мало света или избыток азота"],["Жёлтые нижние листья","перелив или тесный горшок"],["Серый налёт","серая гниль"]],
+ tip:"Весной обрежьте побеги на треть: куст станет пышнее и зацветёт обильнее.",pests:["botrytis","aphid","thrips"],hue:350,shape:"pelargonium"},
+{id:"dracaena",n:"Драцена",f:"Драконово дерево",l:"Dracaena",li:[0,1],w:2,sum:8,win:14,
+ wt:"Умеренно; не переносит застоя. Листья не должны терять упругость.",
+ t:[18,27],tw:15,h:2,hn:"Опрыскивайте и протирайте листья.",
+ feed:"Раз в месяц весной и летом.",rep:"Раз в 2–3 года.",
+ pet:false,pn:"Токсична для кошек и собак.",d:1,
+ iss:[["Коричневые кончики","сухой воздух или фтор в воде"],["Нижние листья сохнут","естественное старение"],["Жёлтые листья","перелив"]],
+ tip:"Поливайте отстоянной или фильтрованной водой.",pests:["spider","scale","thrips"],hue:135,shape:"tree"},
+{id:"cactus",n:"Кактусы",f:"Кактус",l:"Cactaceae",li:[2],w:1,sum:14,win:45,
+ wt:"Летом редко, зимой почти не поливайте. Земля должна полностью просохнуть.",
+ t:[15,32],tw:8,h:1,hn:"Сухой воздух в норме.",
+ feed:"Раз в месяц летом специальным удобрением.",rep:"Раз в 2–3 года, в песчаную смесь.",
+ pet:true,pn:"Большинство безопасны, но колючки травмируют.",d:0,
+ iss:[["Мягкое основание","гниль от перелива"],["Вытягивается","мало света"],["Коричневые пробковые пятна","ожог или старение"]],
+ tip:"Зимой дайте покой: прохладно (8–12 °C), светло и сухо — весной зацветёт.",pests:["mealy","scale","rot"],hue:90,shape:"cactus"},
+{id:"hoya",n:"Хойя",f:"Восковой плющ",l:"Hoya carnosa",li:[1,2],w:2,sum:10,win:21,
+ wt:"Поливайте, когда земля просохла; толстые листья хранят воду.",
+ t:[16,27],tw:12,h:1,hn:"Подойдёт обычная влажность, иногда душ.",
+ feed:"Раз в месяц весной и летом.",rep:"Раз в 2–3 года; любит тесный горшок.",
+ pet:true,pn:"Безопасна для кошек и собак.",d:1,
+ iss:[["Не цветёт","мало света"],["Сморщенные листья","недолив или повреждённые корни"],["Опадают бутоны","перемещение горшка"]],
+ tip:"Не срезайте цветоножки: на них цветы появятся снова.",pests:["mealy","scale","aphid"],hue:160,shape:"vine"},
+{id:"calathea",n:"Калатея",f:"Марантовые, молитвенное растение",l:"Calathea",li:[0,1],w:4,sum:5,win:9,
+ wt:"Земля слегка влажная, но без застоя. Вода мягкая и тёплая.",
+ t:[18,26],tw:17,h:3,hn:"Влажный воздух обязателен, подойдёт увлажнитель.",
+ feed:"Раз в 2–3 недели вполсилы.",rep:"Раз в год весной.",
+ pet:true,pn:"Безопасна для кошек и собак.",d:2,
+ iss:[["Скручиваются листья","сухой воздух или недолив"],["Коричневые края","жёсткая вода или сухость"],["Бледные пятна","прямое солнце"]],
+ tip:"Не терпит сквозняков и прямого солнца; идеально ставить подальше от окна.",pests:["spider","thrips","mealy"],hue:175,shape:"broad"}
+];
+
+const SYM=[
+{id:"yellow",n:"Жёлтые листья",c:[["Перелив","Земля мокрая, листья мягкие, жёлтые снизу.","Дайте земле просохнуть, проверьте дренаж, при гнили пересадите."],["Нехватка питания","Желтеют старые листья, рост замедлен.","Подкормите в сезон роста."],["Недостаток света","Листья бледные, рост слабый.","Переставьте ближе к окну."],["Естественное старение","Желтеют единичные нижние листья.","Удалите листья, ничего больше не нужно."]]},
+{id:"brown",n:"Коричневые кончики",c:[["Сухой воздух","Кончики сухие, хрупкие, особенно зимой.","Увлажняйте воздух, уберите от батареи."],["Соли в воде","На земле белый налёт.","Поливайте отстоянной или фильтрованной водой."],["Недолив","Земля пересохла, листья вялые.","Полейте, вымочите ком."],["Ожог","Пятна на стороне окна.","Притените от прямого солнца."]]},
+{id:"drop",n:"Листья опадают",c:[["Сквозняк и перемена места","Листья падают быстро после перестановки.","Выберите постоянное тёплое место."],["Перелив или недолив","Земля слишком мокрая или сухая.","Наладьте режим полива."],["Мало света зимой","Падают нижние листья.","Переставьте на светлое место."],["Вредители","Липкость, налёт, точки.","Осмотрите растение, обработайте."]]},
+{id:"wilt",n:"Листья вялые",c:[["Недолив","Земля сухая, ком отходит от стенок.","Полейте обильно, дайте стечь."],["Перелив и гниль корней","Земля мокрая, но листья вялые.","Достаньте растение, обрежьте гнилое, пересадите."],["Жара","Вянет в жаркие часы.","Притените, проветрите."]]},
+{id:"sticky",n:"Липкий налёт",c:[["Тля","Колонии на молодых побегах.","Смойте душем, обработайте инсектицидом."],["Щитовка","Бурые бугорки на стеблях.","Снимите вручную, обработайте."],["Мучнистый червец","Белые комочки в пазухах.","Протрите спиртом, обработайте."]]},
+{id:"web",n:"Паутинка и точки",c:[["Паутинный клещ","Тонкая паутина, светлые точки.","Увлажните, обработайте акарицидом."]]},
+{id:"white",n:"Белый налёт",c:[["Мучнистая роса","Мучнистый налёт на листьях.","Удалите поражённое, обработайте фунгицидом, проветрите."],["Мучнистый червец","Белые ватные комочки.","Протрите спиртом."],["Соли на земле","Белая корка на поверхности.","Замените верхний слой."]]},
+{id:"gnat",n:"Мошки над землёй",c:[["Грибной комарик","Мошки при поливе, влажная земля.","Подсушите землю, добавьте слой песка, ловушки."]]},
+{id:"nobloom",n:"Не цветёт",c:[["Мало света","Листья тёмные, побеги тянутся.","Переставьте ближе к окну."],["Слишком большой горшок","Растёт корень, а не цветы.","Пересадите в меньший."],["Нет зимнего покоя","Растение не отдыхало.","Дайте прохладу и меньше воды зимой."]]},
+{id:"leggy",n:"Растение вытянулось",c:[["Нехватка света","Длинные расстояния между листьями.","Ближе к свету, прищипните верхушку."],["Избыток азота","Мягкий, быстрый рост.","Сократите подкормку."]]},
+{id:"spots",n:"Пятна на листьях",c:[["Ожог","Сухие светлые пятна.","Притените от прямого солнца."],["Грибковая инфекция","Тёмные пятна с ободком.","Удалите листья, обработайте фунгицидом."],["Холодная вода","Пятна после полива.","Поливайте тёплой водой."]]}
+];
+
+const PESTS=[
+{id:"spider",n:"Паутинный клещ",look:"Тонкая паутина, светлые точки на листьях, листья тускнеют и скручиваются.",why:"Сухой тёплый воздух.",do:"Повысьте влажность, промойте листья, обработайте акарицидом."},
+{id:"aphid",n:"Тля",look:"Мелкие зелёные или чёрные насекомые на молодых побегах, липкий налёт.",why:"Свежие побеги, избыток азота.",do:"Смойте душем, повторите обработку инсектицидом."},
+{id:"scale",n:"Щитовка",look:"Коричневые выпуклые бугорки на стеблях и листьях, липкость.",why:"Привнесены с новым растением.",do:"Снимите вручную ватой со спиртом, обработайте инсектицидом."},
+{id:"mealy",n:"Мучнистый червец",look:"Белые ватные комочки в пазухах листьев.",why:"Теплый сухой воздух, новые растения.",do:"Протрите спиртом, обработайте инсектицидом, повторите через неделю."},
+{id:"thrips",n:"Трипсы",look:"Серебристые штрихи на листьях, чёрные точки, деформированные бутоны.",why:"Сухой воздух, тепло.",do:"Изолируйте растение, обработайте инсектицидом, повторите."},
+{id:"gnat",n:"Грибной комарик",look:"Мелкие мошки у земли, личинки в мокром грунте.",why:"Постоянно мокрая земля.",do:"Подсушите землю, песок поверх, липкие ловушки."}
+];
+const DIS=[
+{id:"rot",n:"Корневая гниль",look:"Земля мокрая, корни коричневые и мягкие, листья вянут, запах.",why:"Перелив, плохой дренаж.",do:"Достаньте растение, обрежьте гнилое, пересадите в свежий грунт, обработайте фунгицидом."},
+{id:"mildew",n:"Мучнистая роса",look:"Белый мучнистый налёт на листьях и бутонах.",why:"Высокая влажность и плохой воздухообмен.",do:"Удалите поражённое, проветрите, обработайте фунгицидом."},
+{id:"botrytis",n:"Серая гниль",look:"Серый пушистый налёт на листьях, цветах, стеблях.",why:"Сырость, холод, густые заросли.",do:"Удалите поражённое, уменьшите полив, проветривайте, фунгицид."}
+];
+PESTS.concat(DIS).forEach(x=>x.disease=DIS.includes(x));
+
+const RULES=["Проверяйте землю пальцем на глубину 2–3 см прежде чем поливать.","Обеспечьте дренаж: отверстия в горшке и слив лишней воды из поддона.","Поливайте водой комнатной температуры, отстоянной не менее суток."];
+const FIRST=["Изолируйте растение от остальных.","Осмотрите листья, стебли и землю, переверните лист.","Удалите повреждённые части чистым инструментом.","Обрабатывайте препаратами только по инструкции, в проветриваемом месте, вдали от детей и питомцев."];
+
+const SEASONS=[
+{n:"Весна",m:[2,3,4],c:"#4caf6a",pol:"Постепенно увеличивайте полив.",feed:"Начните подкормки раз в 2–4 недели.",rep:"Лучшее время для пересадки.",light:"Света больше, привыкайте постепенно.",hum:"Опрыскивайте по мере потепления.",todo:"Обрезка и черенкование."},
+{n:"Лето",m:[5,6,7],c:"#e0a415",pol:"Чаще, но по состоянию земли.",feed:"Регулярно по схеме на удобрении.",rep:"Только в экстренных случаях.",light:"Притеняйте южные окна в полдень.",hum:"Опрыскивание и проветривание.",todo:"Следите за вредителями, выносите на балкон."},
+{n:"Осень",m:[8,9,10],c:"#d4642a",pol:"Сокращайте частоту.",feed:"Постепенно прекращайте.",rep:"Не пересаживайте.",light:"Света становится меньше, переставьте ближе к окну.",hum:"Включается отопление, следите за сухостью.",todo:"Занесите растения с балкона до холодов."},
+{n:"Зима",m:[11,0,1],c:"#3b7ec0",pol:"Редко, по состоянию земли.",feed:"Не подкармливайте.",rep:"Не пересаживайте.",light:"Максимально светлое место, подсветка.",hum:"Подальше от батарей, увлажняйте воздух.",todo:"Проверяйте на вредителей."}
+];
+
+/* ---------- иллюстрации ---------- */
+function art(p,w,h){
+  const hs=p.hue,c1=`hsl(${hs},45%,38%)`,c2=`hsl(${hs},50%,52%)`,c3=`hsl(${hs},40%,28%)`;
+  const bg=`hsl(${hs},45%,90%)`,pot=`#c47a4a`;
+  const potSvg=`<path d="M70 160h60l-6 34H76z" fill="${pot}"/><rect x="66" y="154" width="68" height="10" rx="3" fill="#a9623a"/>`;
+  let s="";
+  switch(p.shape){
+   case"broad":s=`<path d="M100 156V80" stroke="${c3}" stroke-width="4"/><ellipse cx="72" cy="90" rx="30" ry="22" fill="${c1}" transform="rotate(-25 72 90)"/><ellipse cx="130" cy="82" rx="30" ry="22" fill="${c2}" transform="rotate(25 130 82)"/><ellipse cx="100" cy="56" rx="26" ry="30" fill="${c1}"/><ellipse cx="80" cy="128" rx="24" ry="14" fill="${c2}" transform="rotate(-20 80 128)"/><ellipse cx="124" cy="126" rx="24" ry="14" fill="${c1}" transform="rotate(20 124 126)"/>`;break;
+   case"tree":s=`<path d="M100 156V70" stroke="#7a5a3a" stroke-width="6"/><circle cx="100" cy="52" r="32" fill="${c1}"/><circle cx="72" cy="80" r="24" fill="${c2}"/><circle cx="128" cy="80" r="24" fill="${c2}"/><circle cx="100" cy="94" r="20" fill="${c1}"/>`;break;
+   case"sword":s=[[-22,95],[0,110],[22,95],[-10,85],[12,85]].map((a,i)=>`<path d="M${100+a[0]*.4} 156Q${100+a[0]*2} ${156-a[1]*.6} ${100+a[0]*1.2} ${156-a[1]-20}Q${100+a[0]*.2} ${156-a[1]*.5} ${106+a[0]*.4} 156Z" fill="${i%2?c2:c1}"/>`).join("");break;
+   case"zz":s=[-36,-18,0,18,36].map((a,i)=>`<path d="M100 156Q${100+a*1.4} 120 ${100+a*1.8} ${60+Math.abs(a)}" stroke="${c3}" stroke-width="3" fill="none"/><ellipse cx="${100+a*1.8}" cy="${64+Math.abs(a)}" rx="13" ry="18" fill="${i%2?c2:c1}" transform="rotate(${a} ${100+a*1.8} ${64+Math.abs(a)})"/>`).join("");break;
+   case"tuft":s=[-40,-24,-8,8,24,40].map((a,i)=>`<path d="M100 156Q${100+a*1.5} 70 ${100+a*2.4} ${100+Math.abs(a)}" stroke="${i%2?c2:c1}" stroke-width="9" stroke-linecap="round" fill="none"/>`).join("")+`<path d="M130 100Q158 96 160 126" stroke="${c3}" stroke-width="2" fill="none"/><circle cx="160" cy="128" r="9" fill="${c2}"/>`;break;
+   case"vine":s=`<path d="M100 156Q60 110 76 70M100 156Q140 120 128 74" stroke="${c3}" stroke-width="3" fill="none"/><path d="M76 70Q150 40 176 100" stroke="${c3}" stroke-width="2" fill="none"/>`+[[76,70],[84,100],[128,74],[124,104],[150,64],[168,88],[66,118],[98,126]].map((a,i)=>`<path d="M${a[0]} ${a[1]}q-14 -4 -16 12q14 6 16 -12z" fill="${i%2?c2:c1}" transform="scale(1.2) translate(${-a[0]*.17} ${-a[1]*.17})"/>`).join("");break;
+   case"cactus":s=`<rect x="84" y="62" width="32" height="96" rx="16" fill="${c1}"/><path d="M84 112h-14a8 8 0 0 1-8-8V84a8 8 0 0 1 16 0v8h6z" fill="${c2}"/><path d="M116 100h14a8 8 0 0 0 8-8V80a8 8 0 0 0-16 0v6h-6z" fill="${c2}"/><circle cx="100" cy="58" r="7" fill="#ee82a1"/>`;break;
+   case"rosette":s=[0,60,120,180,240,300].map((a,i)=>`<ellipse cx="100" cy="132" rx="30" ry="12" fill="${i%2?c2:c1}" transform="rotate(${a} 100 140)"/>`).join("")+`<g fill="#a265c9"><circle cx="86" cy="116" r="7"/><circle cx="106" cy="108" r="7"/><circle cx="122" cy="120" r="7"/></g>`;break;
+   case"orchid":s=`<path d="M100 156q-6-50 0-90q30-6 38-40" stroke="${c3}" stroke-width="3" fill="none"/><ellipse cx="78" cy="140" rx="30" ry="12" fill="${c1}" transform="rotate(-12 78 140)"/><ellipse cx="124" cy="140" rx="30" ry="12" fill="${c2}" transform="rotate(12 124 140)"/><g fill="#f4d2e6"><circle cx="106" cy="76" r="12"/><circle cx="124" cy="50" r="12"/><circle cx="138" cy="28" r="10"/></g><g fill="#c24b87"><circle cx="106" cy="76" r="4"/><circle cx="124" cy="50" r="4"/><circle cx="138" cy="28" r="3.5"/></g>`;break;
+   case"pelargonium":s=`<path d="M100 156V84M100 120L74 94M100 118L126 92" stroke="${c3}" stroke-width="3"/><circle cx="74" cy="100" r="18" fill="${c1}"/><circle cx="126" cy="98" r="18" fill="${c2}"/><circle cx="100" cy="124" r="20" fill="${c1}"/><g fill="#e0476d"><circle cx="100" cy="64" r="11"/><circle cx="82" cy="72" r="9"/><circle cx="118" cy="72" r="9"/><circle cx="100" cy="82" r="9"/></g>`;break;
+  }
+  return `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Рисунок: ${p.n}"><rect width="200" height="200" fill="${bg}"/>${s}${potSvg}</svg>`;
+}
+const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId=id=>P.find(p=>p.id===id);
+
+/* ---------- хранилище ---------- */
+const KEY="moy-sad-dom";
+let mine=[];
+try{mine=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){mine=[]}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(mine))}catch(e){}};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const inMine=id=>mine.some(m=>m.id===id);
+const toDay=s=>{const[a,b,c]=s.split("-").map(Number);return Date.UTC(a,b-1,c)/864e5};
+function interval(p){const m=new Date().getMonth();
+  if([10,11,0,1].includes(m))return p.win;
+  if(m===2||m===9)return Math.round((p.win+p.sum)/2);
+  return p.sum}
+function status(m){const p=byId(m.id),iv=interval(p),since=Math.round(toDay(today())-toDay(m.last)),left=iv-since;
+  return{p,iv,since,left,pct:Math.min(100,Math.max(0,since/iv*100))}}
+function plural(n,a,b,c){n=Math.abs(n);const k=n%100,r=n%10;return k>10&&k<20?c:r===1?a:r>1&&r<5?b:c}
+
+/* ---------- представления ---------- */
+const view=document.getElementById("view"),dlg=document.getElementById("dlg");
+const F={q:"",light:null,easy:false,pet:false};
+const sTitle=(t,s)=>`<h2>${t}</h2><p class="sub">${s}</p>`;
+
+function home(){
+  const five=["monstera","sansevieria","cactus","orchid","pelargonium"].map(byId);
+  return `<section class="hero" id="home"><div>
+    <h1>Мой сад дома</h1>
+    <p class="lead">Всё об уходе за домашними цветами: когда поливать, сколько света и тепла нужно и что делать, если растение заболело.</p>
+    <div class="btns"><a class="btn pri" href="#catalog">Открыть каталог</a><a class="btn sec" href="#my">Мои растения</a></div></div>
+    <div class="shelf"><div class="row">${five.map(p=>`<button data-open="${p.id}" aria-label="Открыть: ${E(p.n)}">${art(p)}</button>`).join("")}</div><p class="hint">Нажмите на растение, чтобы узнать об уходе</p></div></section>
+    <section class="page" aria-labelledby="r">${sTitle("Три правила для любого растения","Если запомнить только это, большинство проблем вас обойдёт.").replace("<h2>","<h2 id=r>")}<ol class="rules">${RULES.map(r=>`<li>${E(r)}</li>`).join("")}</ol></section>`;
+}
+
+function tags(p){return `<span class="tag w">💧 ${p.w}/5</span><span class="tag s">☀ ${LIGHT[p.li[0]]}${p.li[1]!==p.li[0]?" — "+LIGHT[p.li[p.li.length-1]].toLowerCase():""}</span><span class="tag t">🌡 ${p.t[0]}–${p.t[1]} °C</span>`}
+function match(p){
+  const q=F.q.trim().toLowerCase();
+  if(q&&![p.n,p.f,p.l].some(x=>x.toLowerCase().includes(q)))return false;
+  if(F.light!==null&&!(F.light>=p.li[0]&&F.light<=p.li[p.li.length-1]))return false;
+  if(F.easy&&p.d>0)return false;
+  if(F.pet&&!p.pet)return false;
+  return true}
+function catalog(){
+  return `<section class="page">${sTitle("Каталог растений","Найдите растение по названию, свету или безопасности для питомцев.")}
+  <div class="tools"><label class="sr" for="q">Поиск</label><input type="search" id="q" placeholder="Поиск: монстера, герань, женское счастье…" value="${E(F.q)}"></div>
+  <div class="chips" role="group" aria-label="Фильтры">
+   <button class="chip" data-light="" aria-pressed="${F.light===null}">Любой свет</button>
+   ${LIGHT.map((l,i)=>`<button class="chip" data-light="${i}" aria-pressed="${F.light===i}">${l}</button>`).join("")}
+   <button class="chip" data-f="easy" aria-pressed="${F.easy}">Для новичков</button>
+   <button class="chip" data-f="pet" aria-pressed="${F.pet}">Безопасно для питомцев</button></div>
+  <div id="list"></div></section>`}
+function drawList(){
+  const l=P.filter(match),el=document.getElementById("list");
+  el.innerHTML=`<p class="count" role="status">Найдено: ${l.length} ${plural(l.length,"растение","растения","растений")}</p>`+
+   (l.length?`<div class="grid">${l.map(p=>`<button class="card" data-open="${p.id}"><div class="pic">${art(p)}${inMine(p.id)?'<span class="badge">В моём саду</span>':""}</div><div class="body"><h3>${E(p.n)}</h3><div class="lat">${E(p.l)}</div><div class="meta">${tags(p)}</div></div></button>`).join("")}</div>`
+   :`<div class="empty"><p>Ничего не найдено.</p><button class="btn pri" data-reset>Сбросить фильтры</button></div>`)}
+
+function myView(){
+  const items=mine.map(status).sort((a,b)=>a.left-b.left);
+  const due=items.filter(s=>s.left<=0).length;
+  let h=`<section class="page">${sTitle("Мои растения","Добавьте растения из каталога, и сайт подскажет, когда их поливать. Интервалы учитывают время года.")}`;
+  if(!items.length)return h+`<div class="empty"><p>Пока пусто. Откройте карточку растения и нажмите «Добавить в мой сад».</p><a class="btn pri" href="#catalog">В каталог</a></div></section>`;
+  h+=`<div class="summary" role="status">${due?`Пора поливать: ${due} ${plural(due,"растение","растения","растений")}`:"Сегодня поливать никого не нужно 🌿"}</div>`;
+  h+=items.map(s=>{const late=s.left<0,tdy=s.left===0;
+   const t=late?`Просрочено на ${-s.left} ${plural(-s.left,"день","дня","дней")}`:tdy?"Полить сегодня":`Через ${s.left} ${plural(s.left,"день","дня","дней")}`;
+   return `<article class="my"><div class="th">${art(s.p)}</div><div>
+    <h3><a href="#" data-open="${s.p.id}" style="color:inherit">${E(s.p.n)}</a></h3>
+    <div class="st ${late?"late":tdy?"today":"ok"}">${t}</div>
+    <div class="bar2" role="progressbar" aria-label="Прогресс до полива" aria-valuenow="${Math.round(s.pct)}" aria-valuemin="0" aria-valuemax="100"><i class="${late?"late":""}" style="width:${s.pct}%"></i></div>
+    <div class="row2"><span>Интервал: каждые ${s.iv} дн.</span><label>Последний полив <input type="date" value="${mineOf(s.p.id).last}" max="${today()}" data-date="${s.p.id}"></label>
+    <button class="btn pri sm" data-water="${s.p.id}">Полил(а) сегодня</button><button class="link" data-del="${s.p.id}">Убрать</button></div></div></article>`}).join("");
+  return h+"</section>"}
+const mineOf=id=>mine.find(m=>m.id===id);
+
+function problems(){
+  let h=`<section class="page">${sTitle("Проблемы растений","Выберите, что вы видите: покажем вероятные причины от частых к редким.")}
+  <div class="sym" role="group" aria-label="Симптомы">${SYM.map(s=>`<button data-sym="${s.id}" aria-pressed="false">${s.n}</button>`).join("")}</div>
+  <div id="causes" aria-live="polite"></div>
+  <h3 class="sec-t">Что делать при любой проблеме</h3><ol class="rules">${FIRST.map(r=>`<li>${E(r)}</li>`).join("")}</ol>
+  <div class="note">Препараты (акарицид, инсектицид, фунгицид) применяйте строго по инструкции, в проветриваемом месте, вдали от детей и питомцев.</div>
+  <h3 class="sec-t">Вредители</h3><div class="pgrid">${PESTS.map(pc).join("")}</div>
+  <h3 class="sec-t">Болезни</h3><div class="pgrid">${DIS.map(pc).join("")}</div></section>`;
+  return h}
+const pc=x=>`<article class="pc" id="pc-${x.id}"><h3>${E(x.n)}</h3><dl><dt>Как выглядит</dt><dd>${E(x.look)}</dd><dt>Почему появляется</dt><dd>${E(x.why)}</dd><dt>Что делать</dt><dd>${E(x.do)}</dd></dl></article>`;
+
+function seasons(){
+  const m=new Date().getMonth(),cur=SEASONS.find(s=>s.m.includes(m));
+  return `<section class="page">${sTitle("Уход по сезонам","Растения живут в ритме года: зимой отдыхают, весной и летом растут.")}
+  <div class="seasons">${SEASONS.map(s=>`<article class="season${s===cur?" now":""}" style="--c:${s.c}"><h3>${s.n}${s===cur?'<span class="now-t">Сейчас</span>':""}</h3><dl>
+   <dt>Полив</dt><dd>${s.pol}</dd><dt>Подкормка</dt><dd>${s.feed}</dd><dt>Пересадка</dt><dd>${s.rep}</dd><dt>Свет</dt><dd>${s.light}</dd><dt>Влажность</dt><dd>${s.hum}</dd><dt>Особые дела</dt><dd>${s.todo}</dd></dl></article>`).join("")}</div></section>`}
+
+/* ---------- карточка ---------- */
+function openPlant(id){
+  const p=byId(id);if(!p)return;
+  const sc=(n,max,cls)=>`<div class="scale ${cls||""}" aria-hidden="true">${Array.from({length:max},(_,i)=>`<i class="${i<n?"on":""}"></i>`).join("")}</div>`;
+  const lo=p.li[0],hi=p.li[p.li.length-1];
+  const lightScale=`<div class="scale light" aria-hidden="true">${[0,1,2].map(i=>`<i class="${i>=lo&&i<=hi?"on":""}"></i>`).join("")}</div><div class="tl" aria-hidden="true"><span>Полутень</span><span>Рассеянный</span><span>Солнце</span></div>`;
+  const left=(p.t[0]-5)/30*100,wid=(p.t[1]-p.t[0])/30*100;
+  const added=inMine(id);
+  dlg.innerHTML=`<div class="dhead">${art(p)}<button class="x" data-close aria-label="Закрыть">×</button></div><div class="dbody">
+   <h2 class="ttl">${E(p.n)}</h2><div class="lat" style="color:var(--muted)"><i>${E(p.l)}</i> · ${E(p.f)} · Уход: ${DIFF[p.d].toLowerCase()}</div>
+   <div class="dgrid">
+   <div class="blk"><h4>Полив</h4>${sc(p.w,5)}<p>Потребность в воде: ${p.w} из 5</p><p>Летом — раз в ${p.sum} дн., зимой — раз в ${p.win} дн.</p><p>${E(p.wt)}</p></div>
+   <div class="blk"><h4>Свет</h4>${lightScale}<p>${lo===hi?LIGHT[lo]:LIGHT[lo]+" — "+LIGHT[hi].toLowerCase()}</p></div>
+   <div class="blk"><h4>Температура</h4><div class="temp" role="img" aria-label="Комфортно ${p.t[0]}–${p.t[1]} °C"><b style="left:${left}%;width:${wid}%"></b></div><div class="tl" aria-hidden="true"><span>5 °C</span><span>35 °C</span></div><p>Комфортно: ${p.t[0]}–${p.t[1]} °C. Зимой не ниже ${p.tw} °C.</p></div>
+   <div class="blk"><h4>Влажность воздуха</h4>${sc(p.h,3,"hum")}<p>${HUM[p.h-1]}. ${E(p.hn)}</p></div>
+   <div class="blk"><h4>Подкормка</h4><p>${E(p.feed)}</p></div>
+   <div class="blk"><h4>Пересадка</h4><p>${E(p.rep)}</p></div>
+   <div class="blk"><h4>Питомцы</h4><p class="${p.pet?"safe":"danger"}">${p.pet?"✓ Безопасно":"⚠ Опасно"} для кошек и собак</p><p>${E(p.pn)}</p></div>
+   <div class="blk"><h4>Чаще всего страдает от</h4>${p.pests.map(x=>`<button class="pest" data-pest="${x}">${E((PESTS.concat(DIS).find(y=>y.id===x)||{}).n||x)}</button>`).join("")}</div>
+   </div>
+   <div class="blk" style="margin-top:12px"><h4>Частые проблемы</h4><ul class="plain">${p.iss.map(i=>`<li><b>${E(i[0])}:</b> ${E(i[1])}</li>`).join("")}</ul></div>
+   <div class="tip"><b>Совет.</b> ${E(p.tip)}</div>
+   <div class="btns" style="margin-top:18px"><button class="btn ${added?"sec":"pri"}" data-toggle="${p.id}">${added?"Убрать из моего сада":"Добавить в мой сад"}</button></div></div>`;
+  if(!dlg.open)dlg.showModal();dlg.scrollTop=0}
+
+/* ---------- роутинг ---------- */
+function route(){
+  const p=(location.hash||"#home").slice(1);
+  const page=["catalog","my","problems","seasons"].includes(p)?p:"home";
+  view.innerHTML={home:home,catalog:catalog,my:myView,problems:problems,seasons:seasons}[page]();
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.p===page));
+  if(page==="catalog")drawList();
+  const c=document.getElementById("navCnt");c.textContent=mine.length;c.hidden=!mine.length;
+}
+addEventListener("hashchange",()=>{route();scrollTo(0,0)});
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-open],[data-close],[data-toggle],[data-pest],[data-light],[data-f],[data-reset],[data-water],[data-del],[data-sym]");
+  if(!t)return;
+  const d=t.dataset;
+  if(d.open!==undefined){e.preventDefault();openPlant(d.open)}
+  else if(d.close!==undefined)dlg.close();
+  else if(d.toggle){
+    if(inMine(d.toggle))mine=mine.filter(m=>m.id!==d.toggle);else mine.push({id:d.toggle,last:today()});
+    save();openPlant(d.toggle);const pg=location.hash;route();}
+  else if(d.pest){dlg.close();location.hash="#problems";setTimeout(()=>{const el=document.getElementById("pc-"+d.pest);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("hl")}},60)}
+  else if(d.light!==undefined){F.light=d.light===""?null:+d.light;route()}
+  else if(d.f){F[d.f]=!F[d.f];route()}
+  else if(d.reset!==undefined){F.q="";F.light=null;F.easy=F.pet=false;route()}
+  else if(d.water){mineOf(d.water).last=today();save();route()}
+  else if(d.del){mine=mine.filter(m=>m.id!==d.del);save();route()}
+  else if(d.sym){
+    document.querySelectorAll(".sym button").forEach(b=>b.setAttribute("aria-pressed",b===t));
+    const s=SYM.find(x=>x.id===d.sym);
+    document.getElementById("causes").innerHTML=`<div class="causes"><h3 style="margin:14px 0 4px">${E(s.n)}: возможные причины</h3>${s.c.map((c,i)=>`<div class="cause"><b class="n">${i+1}</b><b>${E(c[0])}</b><p><em>Как понять:</em> ${E(c[1])}</p><p><em>Что делать:</em> ${E(c[2])}</p></div>`).join("")}</div>`}
+});
+document.addEventListener("input",e=>{if(e.target.id==="q"){F.q=e.target.value;drawList()}});
+document.addEventListener("change",e=>{const id=e.target.dataset.date;if(id&&e.target.value){mineOf(id).last=e.target.value;save();route()}});
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+dlg.addEventListener("close",()=>{if(location.hash==="#catalog")drawList()});
+route();
+</script>
+</body>
+</html>
